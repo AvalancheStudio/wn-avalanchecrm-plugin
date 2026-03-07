@@ -1,0 +1,63 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+  title:
+    label: Title
+    span: full
+    required: true
+  project:
+    label: Project
+    type: relation
+    span: left
+    nameFrom: name
+  assigned_to:
+    label: Assigned To
+    type: relation
+    span: right
+    nameFrom: login
+  status:
+    label: Status
+    type: dropdown
+    span: left
+  priority:
+    label: Priority
+    type: dropdown
+    span: right
+  due_date:
+    label: Due Date
+    type: datepicker
+    mode: date
+    span: left
+  description:
+    label: Description
+    type: richeditor
+    span: full
+  _billing_section:
+    label: Billing
+    type: section
+    span: full
+  is_billable:
+    label: Billable
+    type: checkbox
+    span: left
+    comment: Mark this task as billable to include it in invoices.
+  hours:
+    label: Hours
+    type: number
+    span: left
+    comment: Number of hours spent on this task.
+    trigger:
+        action: show
+        field: is_billable
+        condition: checked
+  hourly_rate:
+    label: Hourly Rate Override
+    type: number
+    span: right
+    comment: Leave blank to use the project default rate.
+    trigger:
+        action: show
+        field: is_billable
+        condition: checked

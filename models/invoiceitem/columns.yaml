@@ -1,0 +1,17 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    description:
+        label: Description
+        searchable: true
+    quantity:
+        label: Qty / Hours
+        type: number
+    unit_price:
+        label: Rate
+        type: number
+    amount:
+        label: Amount
+        type: number

@@ -1,0 +1,81 @@
+{{ themeStyles|raw }}
+
+<div class="dashboard-wrapper">
+    {# Use component variables for independence from page state #}
+    {% set user = __SELF__.user %}
+    {% set client = __SELF__.client %}
+    {% set stats = __SELF__.stats %}
+
+    {% if not user %}
+        <div class="account-details-alert account-details-alert--warning">
+            <p>Please <a href="{{ 'account'|page }}">sign in</a> to view your dashboard.</p>
+        </div>
+    {% elseif not client %}
+        <div class="account-details-alert account-details-alert--info">
+            <p>Your client profile is being set up. Please check back later.</p>
+        </div>
+    {% else %}
+        <div class="dashboard-header">
+            <h1>Welcome back, {{ user.name }}</h1>
+            <p>Here's what's happening with your account today.</p>
+        </div>
+
+        <div class="dashboard-grid">
+            {# Tickets Card #}
+            {% if crmSettings.enable_tickets %}
+                <a href="{{ 'tickets'|page }}" class="dashboard-card card-tickets">
+                    <div class="dashboard-card-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="dashboard-card-title">Tickets</div>
+                    <div class="dashboard-card-value">{{ stats.tickets.total }}</div>
+                    <div class="dashboard-card-subtext">
+                        <span>{{ stats.tickets.open }}</span> open tickets requiring attention
+                    </div>
+                </a>
+            {% endif %}
+
+            {# Invoices Card #}
+            {% if crmSettings.enable_invoices %}
+                <a href="{{ 'invoices'|page }}" class="dashboard-card card-invoices">
+                    <div class="dashboard-card-icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <div class="dashboard-card-title">Invoices</div>
+                    <div class="dashboard-card-value">{{ stats.invoices.total }}</div>
+                    <div class="dashboard-card-subtext">
+                        <span>{{ stats.invoices.unpaid }}</span> unpaid invoices
+                    </div>
+                </a>
+            {% endif %}
+
+            {# Projects Card #}
+            {% if crmSettings.enable_projects %}
+                <a href="{{ 'projects'|page }}" class="dashboard-card card-projects">
+                    <div class="dashboard-card-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="dashboard-card-title">Projects</div>
+                    <div class="dashboard-card-value">{{ stats.projects.total }}</div>
+                    <div class="dashboard-card-subtext">
+                        <span>{{ stats.projects.active }}</span> active projects
+                    </div>
+                </a>
+            {% endif %}
+
+            {# Subscriptions Card #}
+            {% if crmSettings.enable_subscriptions %}
+                <a href="{{ 'subscriptions'|page }}" class="dashboard-card card-subscriptions">
+                    <div class="dashboard-card-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <div class="dashboard-card-title">Subscriptions</div>
+                    <div class="dashboard-card-value">{{ stats.subscriptions.total }}</div>
+                    <div class="dashboard-card-subtext">
+                        <span>{{ stats.subscriptions.active }}</span> active services
+                    </div>
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>

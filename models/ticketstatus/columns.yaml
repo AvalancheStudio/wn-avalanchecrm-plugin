@@ -1,0 +1,18 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+  name:
+    label: Name
+    searchable: true
+    sortable: true
+  color:
+    label: Color
+    type: colorpicker
+  is_default:
+    label: Default
+    type: switch
+  created_at:
+    label: Created At
+    type: datetime

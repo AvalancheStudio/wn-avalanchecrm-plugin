@@ -1,0 +1,72 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    subject:
+        label: Subject
+        span: full
+        required: true
+    client:
+        label: Client
+        type: relation
+        span: left
+        nameFrom: name
+    project:
+        label: Project
+        type: relation
+        span: right
+        nameFrom: name
+    category:
+        label: Category
+        type: relation
+        span: left
+        nameFrom: name
+    ticket_type:
+        label: Ticket Type
+        type: relation
+        span: right
+        nameFrom: name
+        comment: Select the type of ticket to see additional fields.
+
+    custom_fields_section:
+        label: Custom Fields
+        type: section
+        dependsOn: ticket_type
+        span: full
+    status_relation:
+        label: Status
+        type: relation
+        span: left
+        nameFrom: name
+    priority:
+        label: Priority
+        type: dropdown
+        span: right
+        options:
+            low: Low
+            medium: Medium
+            high: High
+        default: medium
+    description:
+        label: Description
+        type: richeditor
+        span: full
+
+tabs:
+    fields:
+        _replies:
+            label: Replies
+            tab: Replies
+            type: partial
+            path: $/avalanchestudio/avalanchecrm/controllers/tickets/_replies.php
+            context: [update, preview]
+        staff:
+            label: Staff Assignments
+            tab: Assignments
+            type: taglist
+            mode: relation
+            nameFrom: name
+            select: concat(name, ' ', surname)
+            span: left
+            comment: Type to search and select staff members assigned to this ticket.

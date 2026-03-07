@@ -1,0 +1,702 @@
+/* ==========================================================================
+   Avalanche CRM Subscriptions Component
+   ========================================================================== */
+
+/* ---------- Base / Wrapper ---------- */
+.subscriptions-wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1rem;
+    font-family: inherit;
+    color: #333;
+}
+
+/* ---------- Alerts ---------- */
+.subscriptions-alert {
+    padding: 0.875rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+.subscriptions-alert--success {
+    background: var(--crm-success-light, #d4edda);
+    color: var(--crm-success-text, #155724);
+    border: 1px solid var(--crm-success-border, #c3e6cb);
+}
+.subscriptions-alert--error,
+.subscriptions-alert--danger {
+    background: var(--crm-danger-light, #f8d7da);
+    color: var(--crm-danger-text, #721c24);
+    border: 1px solid var(--crm-danger-border, #f5c6cb);
+}
+.subscriptions-alert--warning {
+    background: var(--crm-warning-light, #fff3cd);
+    color: var(--crm-warning-text, #856404);
+    border: 1px solid var(--crm-warning-border, #ffeeba);
+}
+.subscriptions-alert--info {
+    background: var(--crm-info-light, #d1ecf1);
+    color: var(--crm-info-text, #0c5460);
+    border: 1px solid var(--crm-info-border, #bee5eb);
+}
+
+/* ---------- Sections ---------- */
+.subscriptions-section {
+    margin-bottom: 2.5rem;
+}
+.subscriptions-section__title {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+.subscriptions-section__desc {
+    color: #666;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+}
+
+/* ---------- Subscription Cards (Active) ---------- */
+.subscriptions-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+.subscription-card {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+.subscription-card:hover {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+.subscription-card--active {
+    border-left: 4px solid var(--crm-success, #28a745);
+}
+.subscription-card--pending {
+    border-left: 4px solid var(--crm-warning, #ffc107);
+    opacity: 0.85;
+}
+
+.subscription-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+.subscription-card__plan-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Badges */
+.subscription-card__badge {
+    display: inline-block;
+    padding: 0.25rem 0.65rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+.subscription-card__badge--active {
+    background: var(--crm-success-light, #d4edda);
+    color: var(--crm-success-text, #155724);
+}
+.subscription-card__badge--past_due {
+    background: var(--crm-warning-light, #fff3cd);
+    color: var(--crm-warning-text, #856404);
+}
+.subscription-card__badge--canceled {
+    background: var(--crm-danger-light, #f8d7da);
+    color: var(--crm-danger-text, #721c24);
+}
+.subscription-card__badge--pending {
+    background: var(--crm-warning-light, #fff3cd);
+    color: var(--crm-warning-text, #856404);
+}
+.subscription-card__pending-note {
+    font-size: 0.85rem;
+    color: var(--crm-warning-text, #856404);
+    background: var(--crm-warning-light, #fff3cd);
+    padding: 0.65rem 0.85rem;
+    border-radius: 6px;
+    margin-top: 0.75rem;
+}
+.subscription-card__pending-note i {
+    margin-right: 0.3rem;
+}
+.subscriptions-pending {
+    margin-top: 1.5rem;
+}
+
+.subscription-card__body {
+    padding: 1.25rem;
+}
+.subscription-card__amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 1rem;
+}
+.subscription-card__cycle {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #6c757d;
+}
+
+.subscription-card__details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+}
+.subscription-card__detail {
+    display: flex;
+    flex-direction: column;
+}
+.subscription-card__label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #999;
+    margin-bottom: 0.2rem;
+}
+.subscription-card__value {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.subscription-card__actions {
+    display: flex;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid #e9ecef;
+    background: #fafbfc;
+    flex-wrap: wrap;
+}
+
+/* ---------- Buttons ---------- */
+.subscriptions-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1.1rem;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-decoration: none;
+    line-height: 1.4;
+}
+.subscriptions-btn:focus {
+    outline: 2px solid #80bdff;
+    outline-offset: 2px;
+}
+.subscriptions-btn--primary {
+    background: var(--crm-primary, #007bff);
+    color: #fff;
+    border-color: var(--crm-primary, #007bff);
+}
+.subscriptions-btn--primary:hover {
+    background: var(--crm-primary-hover, #0069d9);
+    border-color: var(--crm-primary-hover, #0062cc);
+}
+.subscriptions-btn--secondary {
+    background: #6c757d;
+    color: #fff;
+    border-color: #6c757d;
+}
+.subscriptions-btn--secondary:hover {
+    background: #5a6268;
+    border-color: #545b62;
+}
+.subscriptions-btn--outline {
+    background: transparent;
+    color: var(--crm-primary, #007bff);
+    border-color: var(--crm-primary, #007bff);
+}
+.subscriptions-btn--outline:hover {
+    background: var(--crm-primary, #007bff);
+    color: #fff;
+}
+.subscriptions-btn--danger {
+    background: var(--crm-danger, #dc3545);
+    color: #fff;
+    border-color: var(--crm-danger, #dc3545);
+}
+.subscriptions-btn--danger:hover {
+    background: var(--crm-danger-hover, #c82333);
+    border-color: var(--crm-danger-hover, #bd2130);
+}
+.subscriptions-btn--disabled {
+    background: #e9ecef;
+    color: #6c757d;
+    border-color: #e9ecef;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* ---------- Plan Cards ---------- */
+.subscriptions-plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 1.25rem;
+}
+
+.plan-card {
+    position: relative;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.plan-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+.plan-card--current {
+    border-color: var(--crm-success, #28a745);
+    border-width: 2px;
+}
+
+.plan-card__ribbon {
+    position: absolute;
+    top: 12px;
+    right: -28px;
+    background: var(--crm-success, #28a745);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.25rem 2rem;
+    transform: rotate(45deg);
+    letter-spacing: 0.05em;
+}
+
+.plan-card__header {
+    text-align: center;
+    padding: 1.5rem 1.25rem 1rem;
+}
+.plan-card__name {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+}
+.plan-card__price {
+    margin-bottom: 0;
+}
+.plan-card__amount {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--crm-primary, #007bff);
+}
+.plan-card__cycle {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.plan-card__body {
+    flex: 1;
+    padding: 0 1.25rem 1rem;
+}
+.plan-card__description {
+    color: #666;
+    font-size: 0.88rem;
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+.plan-card__features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.plan-card__feature {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0;
+    font-size: 0.88rem;
+    color: #444;
+}
+.plan-card__feature i {
+    color: var(--crm-success, #28a745);
+    font-size: 0.8rem;
+}
+
+.plan-card__footer {
+    text-align: center;
+    padding: 1rem 1.25rem 1.5rem;
+}
+.plan-card__footer .subscriptions-btn {
+    width: 100%;
+}
+
+/* ---------- Payment Method Cards ---------- */
+.payment-methods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 1rem;
+}
+.payment-method-card {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: box-shadow 0.2s;
+}
+.payment-method-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.payment-method-card__icon {
+    font-size: 1.5rem;
+    color: var(--crm-primary, #007bff);
+    flex-shrink: 0;
+    width: 40px;
+    text-align: center;
+}
+.payment-method-card__info {
+    flex: 1;
+}
+.payment-method-card__info h4 {
+    margin: 0 0 0.25rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+.payment-method-card__info p {
+    margin: 0;
+    font-size: 0.82rem;
+    color: #666;
+}
+.payment-method-card__status {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 50px;
+    text-transform: uppercase;
+}
+.payment-method-card__status--available {
+    background: var(--crm-success-light, #d4edda);
+    color: var(--crm-success-text, #155724);
+}
+
+/* ---------- Empty State ---------- */
+.subscriptions-empty {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px dashed #dee2e6;
+}
+.subscriptions-empty__icon {
+    font-size: 2.5rem;
+    color: #ced4da;
+    margin-bottom: 0.75rem;
+}
+.subscriptions-empty__text {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+}
+.subscriptions-empty__hint {
+    font-size: 0.88rem;
+    color: #999;
+}
+
+/* ---------- Table (Past Subscriptions) ---------- */
+.subscriptions-past {
+    margin-top: 2rem;
+}
+.subscriptions-past__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #555;
+}
+.subscriptions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+.subscriptions-table th,
+.subscriptions-table td {
+    padding: 0.65rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+}
+.subscriptions-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+}
+.subscriptions-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* ---------- Modals ---------- */
+.subscriptions-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.subscriptions-modal__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+.subscriptions-modal__dialog {
+    position: relative;
+    background: #fff;
+    border-radius: 10px;
+    max-width: 520px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    animation: subscriptions-modal-in 0.2s ease;
+}
+.subscriptions-modal__dialog--small {
+    max-width: 420px;
+}
+@keyframes subscriptions-modal-in {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.subscriptions-modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #e9ecef;
+}
+.subscriptions-modal__header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+.subscriptions-modal__close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+    line-height: 1;
+    padding: 0;
+}
+.subscriptions-modal__close:hover {
+    color: #333;
+}
+.subscriptions-modal__body {
+    padding: 1.25rem;
+}
+.subscriptions-modal__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid #e9ecef;
+    background: #fafbfc;
+    border-radius: 0 0 10px 10px;
+}
+
+/* ---------- Form Elements ---------- */
+.subscriptions-form-group {
+    margin-bottom: 1rem;
+}
+.subscriptions-form-group > label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.88rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.subscriptions-payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.subscriptions-payment-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+.subscriptions-payment-option:hover {
+    border-color: #adb5bd;
+    background: #f8f9fa;
+}
+.subscriptions-payment-option input[type="radio"] {
+    margin: 0;
+}
+.subscriptions-payment-option input[type="radio"]:checked + .subscriptions-payment-option__label {
+    color: var(--crm-primary, #007bff);
+    font-weight: 600;
+}
+.subscriptions-payment-option:has(input:checked) {
+    border-color: var(--crm-primary, #007bff);
+    background: var(--crm-primary-light, #f0f6ff);
+}
+.subscriptions-payment-option__label {
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.subscriptions-plan-summary {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    color: var(--crm-primary, #007bff);
+}
+
+.subscriptions-plan-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.subscriptions-plan-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+.subscriptions-plan-option:hover {
+    border-color: #adb5bd;
+    background: #f8f9fa;
+}
+.subscriptions-plan-option input[type="radio"] {
+    margin: 0;
+}
+.subscriptions-plan-option:has(input:checked) {
+    border-color: var(--crm-primary, #007bff);
+    background: var(--crm-primary-light, #f0f6ff);
+}
+.subscriptions-plan-option__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+.subscriptions-plan-option__price {
+    font-size: 0.82rem;
+    color: var(--crm-primary, #007bff);
+    font-weight: 500;
+}
+.subscriptions-plan-option__desc {
+    font-size: 0.78rem;
+    color: #999;
+}
+
+/* ---------- Responsive ---------- */
+@media (min-width: 768px) {
+    .subscriptions-grid {
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    }
+}
+
+@media (max-width: 576px) {
+    .subscriptions-plans-grid {
+        grid-template-columns: 1fr;
+    }
+    .payment-methods-grid {
+        grid-template-columns: 1fr;
+    }
+    .subscription-card__actions {
+        flex-direction: column;
+    }
+    .subscription-card__actions .subscriptions-btn {
+        width: 100%;
+    }
+    .subscriptions-modal__footer {
+        flex-direction: column;
+    }
+    .subscriptions-modal__footer .subscriptions-btn {
+        width: 100%;
+    }
+}
+
+/* ---------- Payment Option Hint ---------- */
+.subscriptions-payment-option__hint {
+    display: block;
+    font-size: 0.75rem;
+    color: #888;
+    font-weight: 400;
+    margin-top: 0.15rem;
+}
+.subscriptions-payment-option__label {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---------- Stripe Portal Section ---------- */
+.subscriptions-portal-section {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #e9ecef;
+}
+.subscriptions-portal-section .subscriptions-btn i {
+    margin-right: 0.4rem;
+}
+
+/* ---------- Payment Method Card Compact (mandate status) ---------- */
+.payment-method-card--compact {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid #d4edda;
+    border-radius: 0.5rem;
+    background: #f0fdf4;
+}
+.payment-method-card__status--active {
+    color: var(--crm-success, #28a745);
+    font-weight: 600;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}

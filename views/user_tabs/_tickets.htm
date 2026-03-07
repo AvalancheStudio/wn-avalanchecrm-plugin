@@ -1,0 +1,50 @@
+<?php 
+use Backend\Facades\Backend;
+$client = $formModel->client; 
+?>
+<?php if ($client): ?>
+<?php $tickets = $client->tickets()->orderBy('created_at', 'desc')->get(); ?>
+<div class="control-list mt-3">
+    <table class="table data">
+        <thead>
+            <tr>
+                <th><span>Subject</span></th>
+                <th><span>Status</span></th>
+                <th><span>Created</span></th>
+                <th style="width: 50px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($tickets->count() > 0): ?>
+            <?php foreach ($tickets as $ticket): ?>
+            <tr>
+                <td>
+                    <?= e($ticket->subject) ?>
+                </td>
+                <td>
+                    <span class="badge" style="background: <?= e($ticket->status_relation->color ?? '#ccc') ?>">
+                        <?= e($ticket->status_relation ? $ticket->status_relation->name : '') ?>
+                    </span>
+                </td>
+                <td>
+                    <?= $ticket->created_at ? $ticket->created_at->format('M d, Y') : '' ?>
+                </td>
+                <td>
+                    <a href="<?= Backend::url('avalanchestudio/avalanchecrm/tickets/update/' . $ticket->id) ?>"
+                        class="btn btn-xs btn-secondary">
+                        <i class="icon-pencil"></i>
+                    </a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <?php else: ?>
+            <tr>
+                <td colspan="4" class="nolist">No tickets found for this client.</td>
+            </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+<?php else: ?>
+<p>No client profile associated with this user.</p>
+<?php endif; ?>

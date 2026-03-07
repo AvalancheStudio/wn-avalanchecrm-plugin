@@ -1,0 +1,25 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    name:
+        label: Name
+        searchable: true
+    clients:
+        label: Clients
+        relation: clients
+        select: name
+        searchable: true
+    status:
+        label: Status
+        searchable: true
+    start_date:
+        label: Start Date
+        type: date
+    end_date:
+        label: End Date
+        type: date
+    billing_type:
+        label: Billing
+        searchable: true

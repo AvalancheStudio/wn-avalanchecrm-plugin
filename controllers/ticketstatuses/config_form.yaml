@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Ticket Status
+
+# Model Form Configuration
+form: $/avalanchestudio/avalanchecrm/models/ticketstatus/fields.yaml
+
+# Model Class name
+modelClass: AvalancheStudio\AvalancheCRM\Models\TicketStatus
+
+# Default redirect location
+defaultRedirect: avalanchestudio/avalanchecrm/ticketstatuses
+
+# Create page
+create:
+  title: Create Ticket Status
+  redirect: avalanchestudio/avalanchecrm/ticketstatuses/update/:id
+  redirectClose: avalanchestudio/avalanchecrm/ticketstatuses
+
+# Update page
+update:
+  title: Edit Ticket Status
+  redirect: avalanchestudio/avalanchecrm/ticketstatuses
+  redirectClose: avalanchestudio/avalanchecrm/ticketstatuses
+
+# Preview page
+preview:
+  title: Preview Ticket Status

@@ -1,0 +1,263 @@
+{# Invoice Detail View #}
+<div class="invoices-detail">
+
+    <button class="invoices-btn invoices-btn--outline invoices-back-btn"
+        data-request="{{ __SELF__ }}::onBackToList">
+        <i class="icon-arrow-left"></i> Back to Invoices
+    </button>
+
+    <a href="/avalanchecrm/invoice/{{ activeInvoice.id }}/pdf"
+       class="invoices-btn invoices-btn--primary invoices-download-btn"
+       target="_blank"
+       style="float: right; margin-bottom: 15px;">
+        <i class="icon-file-pdf-o"></i> Download PDF
+    </a>
+
+    <div style="clear: both;"></div>
+
+    <div class="invoices-detail-layout">
+
+        {# Main Content #}
+        <div class="invoices-detail-main">
+            <div class="invoices-detail-card">
+                <div class="invoices-detail-header">
+                    <span class="invoices-badge invoices-badge--{{ activeInvoice.status|default('outstanding') }}">
+                        {{ activeInvoice.status|default('outstanding')|replace({'_': ' '})|title }}
+                    </span>
+                    <h2 class="invoices-detail-title">
+                        Invoice {{ activeInvoice.invoice_number|default('#' ~ activeInvoice.id) }}
+                    </h2>
+                    <span class="invoices-detail-date">
+                        Issued {{ activeInvoice.issue_date ? activeInvoice.issue_date|date('M d, Y') : activeInvoice.created_at|date('M d, Y') }}
+                    </span>
+                </div>
+
+                {# Line Items Table #}
+                {% if activeInvoice.items is not empty %}
+                    <div class="invoices-items">
+                        <div class="invoices-table-responsive" style="border: none; border-radius: 0;">
+                            <table class="invoices-table">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th style="text-align: right; width: 100px;">Hours / Qty</th>
+                                        <th style="text-align: right; width: 100px;">Rate</th>
+                                        <th style="text-align: right; width: 120px;">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in activeInvoice.items %}
+                                        <tr>
+                                            <td>{{ item.description }}</td>
+                                            <td style="text-align: right;">{{ item.quantity|number_format(2) }}</td>
+                                            <td style="text-align: right;">{{ item.unit_price|currency }}</td>
+                                            <td style="text-align: right;"><strong>{{ item.amount|currency }}</strong></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr class="invoices-total-row">
+                                        <td colspan="3" style="text-align: right; font-weight: 700;">Total</td>
+                                        <td style="text-align: right; font-weight: 700; font-size: 1.05rem;">{{ activeInvoice.amount|currency }}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="invoices-detail-body">
+                        <div class="invoices-detail-amount-block">
+                            <span class="invoices-detail-amount-label">Total Amount</span>
+                            <span class="invoices-detail-amount-value">{{ activeInvoice.amount|currency }}</span>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {# Notes #}
+                {% if activeInvoice.notes %}
+                    <div class="invoices-detail-notes">
+                        <h4 class="invoices-sidebar-label">Notes</h4>
+                        <p>{{ activeInvoice.notes|nl2br }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Sidebar #}
+        <aside class="invoices-detail-sidebar">
+
+            {# Status #}
+            <div class="invoices-sidebar-section">
+                <h4 class="invoices-sidebar-label">Status</h4>
+                <span class="invoices-badge invoices-badge--{{ activeInvoice.status|default('outstanding') }}">
+                    {{ activeInvoice.status|default('outstanding')|replace({'_': ' '})|title }}
+                </span>
+            </div>
+
+            {# Due Date #}
+            <div class="invoices-sidebar-section">
+                <h4 class="invoices-sidebar-label">Due Date</h4>
+                <span class="invoices-sidebar-value">
+                    {% if activeInvoice.due_date %}
+                        {{ activeInvoice.due_date|date('M d, Y') }}
+                    {% else %}
+                        <span class="invoices-muted">Not set</span>
+                    {% endif %}
+                </span>
+            </div>
+
+            {# Issue Date #}
+            <div class="invoices-sidebar-section">
+                <h4 class="invoices-sidebar-label">Issue Date</h4>
+                <span class="invoices-sidebar-value">
+                    {% if activeInvoice.issue_date %}
+                        {{ activeInvoice.issue_date|date('M d, Y') }}
+                    {% else %}
+                        <span class="invoices-muted">Not set</span>
+                    {% endif %}
+                </span>
+            </div>
+
+            {# Project #}
+            {% if showProject and activeInvoice.project %}
+                <div class="invoices-sidebar-section">
+                    <h4 class="invoices-sidebar-label">Project</h4>
+                    <span class="invoices-sidebar-value">
+                        <i class="icon-briefcase"></i> {{ activeInvoice.project.name }}
+                    </span>
+                </div>
+            {% endif %}
+
+            {# Amount #}
+            <div class="invoices-sidebar-section">
+                <h4 class="invoices-sidebar-label">Amount</h4>
+                <span class="invoices-sidebar-value invoices-sidebar-amount">
+                    {{ activeInvoice.amount|currency }}
+                </span>
+            </div>
+
+            {# Pay Now #}
+            {% if activeInvoice.status != 'paid' and activeInvoice.status != 'cancelled' and activeInvoice.amount > 0 %}
+                <div class="invoices-sidebar-section invoices-pay-section">
+                    <h4 class="invoices-sidebar-label">Pay Now</h4>
+
+                    {% if stripeEnabled %}
+                        <a href="/avalanchecrm/invoice/{{ activeInvoice.id }}/payment/stripe"
+                           class="invoices-pay-btn invoices-pay-btn--stripe">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="vertical-align: middle; margin-right: 6px;">
+                                <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z"/>
+                            </svg>
+                            Pay with Card
+                        </a>
+                    {% endif %}
+
+                    {% if paypalEnabled %}
+                        <a href="/avalanchecrm/invoice/{{ activeInvoice.id }}/payment/paypal"
+                           class="invoices-pay-btn invoices-pay-btn--paypal">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="vertical-align: middle; margin-right: 6px;">
+                                <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/>
+                            </svg>
+                            Pay with PayPal
+                        </a>
+                    {% endif %}
+
+                    {% if gocardlessEnabled %}
+                        <a href="/avalanchecrm/invoice/{{ activeInvoice.id }}/payment/gocardless"
+                           class="invoices-pay-btn invoices-pay-btn--bank">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="vertical-align: middle; margin-right: 6px;">
+                                <path d="M2 20h20v2H2v-2zm1-7h2v5H3v-5zm4 0h2v5H7v-5zm4 0h2v5h-2v-5zm4 0h2v5h-2v-5zm4 0h2v5h-2v-5zM2 7l10-5 10 5v4H2V7zm2 1.236V9h16v-.764L12 4.236 4 8.236z"/>
+                            </svg>
+                            Pay with Bank
+                        </a>
+                    {% endif %}
+
+                    {% if not stripeEnabled and not paypalEnabled and not gocardlessEnabled %}
+                        <p class="invoices-muted" style="font-size: 13px;">
+                            Online payment is not available. Please contact us for payment instructions.
+                        </p>
+                    {% endif %}
+                </div>
+            {% elseif activeInvoice.status == 'paid' %}
+                <div class="invoices-sidebar-section">
+                    <div class="invoices-paid-badge">
+                        <span>&#10003;</span> Paid
+                        {% if activeInvoice.paid_at %}
+                            <small>{{ activeInvoice.paid_at|date('M d, Y') }}</small>
+                        {% endif %}
+                        {% if activeInvoice.payment_method %}
+                            <small>via {{ activeInvoice.payment_method|title }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
+        </aside>
+    </div>
+</div>
+
+<style>
+.invoices-pay-section {
+    border-top: 1px solid #e8ecf0;
+    padding-top: 16px;
+    margin-top: 8px;
+}
+.invoices-pay-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 11px 16px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+.invoices-pay-btn--stripe {
+    background: #635bff;
+    color: #fff;
+}
+.invoices-pay-btn--stripe:hover {
+    background: #5046e5;
+    color: #fff;
+}
+.invoices-pay-btn--paypal {
+    background: #ffc439;
+    color: #253b80;
+}
+.invoices-pay-btn--paypal:hover {
+    background: #f0b72e;
+    color: #253b80;
+}
+.invoices-pay-btn--bank {
+    background: #1a1a2e;
+    color: #fff;
+}
+.invoices-pay-btn--bank:hover {
+    background: #16213e;
+    color: #fff;
+}
+.invoices-paid-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: #e8f8f0;
+    color: #27ae60;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 700;
+}
+.invoices-paid-badge span {
+    font-size: 28px;
+}
+.invoices-paid-badge small {
+    font-size: 12px;
+    font-weight: 400;
+    color: #7f8c8d;
+}
+</style>

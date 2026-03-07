@@ -1,0 +1,79 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    name:
+        label: Campaign Name
+        span: left
+        type: text
+        required: true
+    status:
+        label: Status
+        span: right
+        type: dropdown
+        default: draft
+    subject:
+        label: Email Subject
+        span: left
+        type: text
+    template:
+        label: Email Template
+        span: right
+        type: relation
+        nameFrom: name
+        description: Select an email template to start with.
+    scheduled_at:
+        label: Schedule Date
+        span: left
+        type: datepicker
+        mode: datetime
+    _recipient_info:
+        label: Eligible Recipients
+        span: right
+        type: partial
+        path: $/avalanchestudio/avalanchecrm/controllers/campaigns/_recipient_count.php
+        context: [update, preview]
+    _tag_reference:
+        label: Data Tags
+        type: partial
+        path: $/avalanchestudio/avalanchecrm/controllers/campaigns/_tag_reference.php
+        span: full
+    content:
+        label: Email Content
+        type: richeditor
+        size: huge
+        span: full
+
+tabs:
+    fields:
+        recipients:
+            label: Recipients
+            tab: Delivery Report
+            type: partial
+            path: $/avalanchestudio/avalanchecrm/controllers/campaigns/_recipients_list.php
+            context: [update, preview]
+        total_recipients:
+            label: Total Recipients
+            tab: Delivery Report
+            type: number
+            readOnly: true
+            default: 0
+            span: left
+            context: [update, preview]
+        sent_count:
+            label: Sent
+            tab: Delivery Report
+            type: number
+            readOnly: true
+            default: 0
+            span: auto
+            context: [update, preview]
+        failed_count:
+            label: Failed
+            tab: Delivery Report
+            type: number
+            readOnly: true
+            default: 0
+            span: auto
+            context: [update, preview]

@@ -1,0 +1,47 @@
+{# Tickets Tab #}
+<div class="projects-section">
+    <h3 class="projects-section-title">
+        <i class="icon-ticket"></i> Tickets
+        <span class="projects-section-count">{{ activeProject.tickets|length }}</span>
+    </h3>
+
+    {% if activeProject.tickets is not empty %}
+        <div class="projects-table-responsive">
+            <table class="projects-table">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in activeProject.tickets %}
+                        <tr>
+                            <td>
+                                <strong>{{ ticket.subject|default(ticket.title|default('—')) }}</strong>
+                                {% if ticket.description %}
+                                    <br><small class="projects-task-desc">{{ ticket.description|length > 80 ? ticket.description|slice(0, 80) ~ '...' : ticket.description }}</small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="projects-badge projects-badge--{{ ticket.status|default('open') }}">
+                                    {{ ticket.status|default('open')|replace({'_': ' '})|title }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="projects-priority projects-priority--{{ ticket.priority|default('medium') }}">
+                                    {{ ticket.priority|default('medium')|title }}
+                                </span>
+                            </td>
+                            <td>{{ ticket.created_at|date('M d, Y') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="projects-empty-section">No tickets have been raised for this project.</p>
+    {% endif %}
+</div>

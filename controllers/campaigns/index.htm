@@ -1,0 +1,71 @@
+<?php Block::put('breadcrumb') ?>
+    <ul>
+        <li><a href="<?= Backend::url('avalanchestudio/avalanchecrm/dashboard') ?>">Avalanche CRM</a></li>
+        <li class="active">Campaigns</li>
+    </ul>
+<?php Block::endPut() ?>
+
+<!-- Marketing Stats -->
+<div class="marketing-stats-row padded-container" style="padding-top:20px;">
+    <div class="stat-box">
+        <span class="stat-number"><?= $marketableClients ?></span>
+        <span class="stat-label">Subscribed Clients</span>
+    </div>
+    <div class="stat-box">
+        <span class="stat-number"><?= $optedOutClients ?></span>
+        <span class="stat-label">Opted Out</span>
+    </div>
+    <div class="stat-box">
+        <span class="stat-number"><?= $sentCampaigns ?></span>
+        <span class="stat-label">Sent</span>
+    </div>
+    <div class="stat-box">
+        <span class="stat-number"><?= $draftCampaigns ?></span>
+        <span class="stat-label">Drafts</span>
+    </div>
+    <div class="stat-box">
+        <span class="stat-number"><?= $scheduledCampaigns ?></span>
+        <span class="stat-label">Scheduled</span>
+    </div>
+    <div class="stat-box">
+        <span class="stat-number"><?= $totalTemplates ?></span>
+        <span class="stat-label">Templates</span>
+    </div>
+</div>
+
+<!-- Campaign List -->
+<?= $this->listRender() ?>
+
+<style>
+    .marketing-stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .stat-box {
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        padding: 20px 15px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .stat-number {
+        font-size: 28px;
+        font-weight: 700;
+        color: #2b3e50;
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+</style>

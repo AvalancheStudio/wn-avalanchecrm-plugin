@@ -1,0 +1,100 @@
+{# Create Ticket Form #}
+<div class="tickets-create">
+
+    <button class="tickets-btn tickets-btn--outline tickets-back-btn"
+        data-request="{{ __SELF__ }}::onBackToList">
+        <i class="icon-arrow-left"></i> Back to Tickets
+    </button>
+
+    <div class="tickets-create-card">
+        <h2 class="tickets-create-title">New Ticket</h2>
+
+        <form data-request="{{ __SELF__ }}::onCreateTicket" data-request-flash>
+            <div class="tickets-form-grid">
+
+                <div class="tickets-form-field tickets-form-field--full">
+                    <label for="ticket-subject">Subject <span class="tickets-required">*</span></label>
+                    <input type="text" id="ticket-subject" name="ticket[subject]" class="tickets-input" required placeholder="Brief summary of your issue" />
+                </div>
+
+                <div class="tickets-form-field">
+                    <label for="ticket-category">Category</label>
+                    <select id="ticket-category" name="ticket[category_id]" class="tickets-select">
+                        <option value="">— Select —</option>
+                        {% for cat in categories %}
+                            <option value="{{ cat.id }}">{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="tickets-form-field">
+                    <label for="ticket-project">Project</label>
+                    <select id="ticket-project" name="ticket[project_id]" class="tickets-select">
+                        <option value="">— None —</option>
+                        {% for project in clientProjects %}
+                            <option value="{{ project.id }}">{{ project.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="tickets-form-field">
+                    <label for="ticket-priority">Priority</label>
+                    <select id="ticket-priority" name="ticket[priority]" class="tickets-select">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+
+                <div class="tickets-form-field tickets-form-field--full">
+                    <label>Description</label>
+                    <div class="tickets-richtext-toolbar">
+                        <button type="button" onclick="document.execCommand('bold')" title="Bold"><b>B</b></button>
+                        <button type="button" onclick="document.execCommand('italic')" title="Italic"><i>I</i></button>
+                        <button type="button" onclick="document.execCommand('underline')" title="Underline"><u>U</u></button>
+                        <span class="tickets-richtext-sep"></span>
+                        <button type="button" onclick="document.execCommand('insertUnorderedList')" title="Bullet List"><i class="icon-list-ul"></i></button>
+                        <button type="button" onclick="document.execCommand('insertOrderedList')" title="Numbered List"><i class="icon-list-ol"></i></button>
+                        <span class="tickets-richtext-sep"></span>
+                        <button type="button" onclick="ticketInsertLink()" title="Insert Link"><i class="icon-link"></i></button>
+                        <button type="button" onclick="document.execCommand('removeFormat')" title="Clear Formatting"><i class="icon-eraser"></i></button>
+                    </div>
+                    <div class="tickets-richtext-content"
+                        contenteditable="true"
+                        id="ticket-desc-editor"
+                        oninput="document.getElementById('ticket-desc-input').value = this.innerHTML"></div>
+                    <input type="hidden" name="ticket[description]" id="ticket-desc-input" value="" />
+                </div>
+
+            </div>
+
+            <div class="tickets-form-actions">
+                <button type="submit" class="tickets-btn tickets-btn--primary" data-attach-loading>
+                    <i class="icon-paper-plane"></i> Submit Ticket
+                </button>
+                <button type="button" class="tickets-btn tickets-btn--outline"
+                    data-request="{{ __SELF__ }}::onBackToList">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function ticketInsertLink() {
+    var url = prompt('Enter URL:', 'https://');
+    if (url) {
+        document.execCommand('createLink', false, url);
+    }
+}
+
+// Sync richtext content before AJAX submission
+document.addEventListener('ajaxSetup', function(event) {
+    var editor = document.getElementById('ticket-desc-editor');
+    var hidden = document.getElementById('ticket-desc-input');
+    if (editor && hidden) {
+        hidden.value = editor.innerHTML;
+    }
+});
+</script>

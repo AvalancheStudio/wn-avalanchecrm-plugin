@@ -1,0 +1,52 @@
+{# Project Detail View #}
+<div class="projects-detail">
+
+    <button class="projects-btn projects-btn--outline projects-back-btn"
+        data-request="{{ __SELF__ }}::onBackToList"
+        data-request-update="'{{ __SELF__ }}::list': '#projects-list'"
+        data-request-success="document.getElementById('projects-detail').innerHTML = '';">
+        <i class="icon-arrow-left"></i> Back to Projects
+    </button>
+
+    <div class="projects-detail-header">
+        <div class="projects-detail-title-row">
+            <h2 class="projects-detail-title">{{ activeProject.name }}</h2>
+            <span class="projects-status projects-status--{{ activeProject.status }}">
+                {{ activeProject.status|replace({'_': ' '})|title }}
+            </span>
+        </div>
+
+        {% if activeProject.description %}
+            <p class="projects-detail-description">{{ activeProject.description }}</p>
+        {% endif %}
+
+        <div class="projects-detail-meta">
+            {% if activeProject.start_date %}
+                <span class="projects-meta-item">
+                    <i class="icon-calendar"></i> <strong>Start:</strong> {{ activeProject.start_date|date('M d, Y') }}
+                </span>
+            {% endif %}
+            {% if activeProject.end_date %}
+                <span class="projects-meta-item">
+                    <i class="icon-calendar-check-o"></i> <strong>Due:</strong> {{ activeProject.end_date|date('M d, Y') }}
+                </span>
+            {% endif %}
+        </div>
+    </div>
+
+    {# Tasks Section #}
+    {% if showTasks %}
+        {% partial __SELF__ ~ '::tasks' %}
+    {% endif %}
+
+    {# Tickets Section #}
+    {% if showTickets %}
+        {% partial __SELF__ ~ '::tickets' %}
+    {% endif %}
+
+    {# Invoices Section #}
+    {% if showInvoices %}
+        {% partial __SELF__ ~ '::invoices' %}
+    {% endif %}
+
+</div>

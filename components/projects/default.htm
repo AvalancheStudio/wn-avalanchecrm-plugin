@@ -1,0 +1,40 @@
+{% set user = user %}
+
+{{ themeStyles|raw }}
+
+<div class="projects-wrapper" id="projects-wrapper">
+
+    {% if not user %}
+        <div class="projects-alert projects-alert--warning">
+            <p>Please <a href="{{ 'account'|page }}">sign in</a> to view your projects.</p>
+        </div>
+    {% elseif not client %}
+        <div class="projects-alert projects-alert--warning">
+            <p>No client profile is associated with your account. Please contact support.</p>
+        </div>
+    {% else %}
+
+        {# Flash Messages #}
+        {% flash %}
+            <div class="projects-alert projects-alert--{{ type }}">
+                {{ message }}
+            </div>
+        {% endflash %}
+
+        {# Project Detail View #}
+        <div id="projects-detail">
+            {% if activeProject %}
+                {% partial __SELF__ ~ '::detail' %}
+            {% endif %}
+        </div>
+
+        {# Project List View #}
+        <div id="projects-list">
+            {% if not activeProject %}
+                {% partial __SELF__ ~ '::list' %}
+            {% endif %}
+        </div>
+
+    {% endif %}
+
+</div>

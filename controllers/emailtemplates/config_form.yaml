@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: 'avalanchestudio.avalanchecrm::lang.models.emailtemplate.label'
+
+# Model Form Field configuration
+form: $/avalanchestudio/avalanchecrm/models/emailtemplate/fields.yaml
+
+# Model Class name
+modelClass: AvalancheStudio\AvalancheCRM\Models\EmailTemplate
+
+# Default redirect location
+defaultRedirect: avalanchestudio/avalanchecrm/emailtemplates
+
+# Create page
+create:
+    title: backend::lang.form.create_title
+    redirect: avalanchestudio/avalanchecrm/emailtemplates/update/:id
+    redirectClose: avalanchestudio/avalanchecrm/emailtemplates
+
+# Update page
+update:
+    title: backend::lang.form.update_title
+    redirect: avalanchestudio/avalanchecrm/emailtemplates
+    redirectClose: avalanchestudio/avalanchecrm/emailtemplates
+
+# Preview page
+preview:
+    title: backend::lang.form.preview_title

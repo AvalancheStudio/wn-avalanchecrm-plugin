@@ -1,0 +1,30 @@
+# ===================================
+#  List Behavior Config
+# ===================================
+
+# Model List Structure
+list: $/avalanchestudio/avalanchecrm/models/staff/columns.yaml
+
+# Model Class name
+modelClass: AvalancheStudio\AvalancheCRM\Models\Staff
+
+# List Title
+title: Manage Staff
+
+# Link URL for each record
+recordUrl: winter/user/users/update/:user_id
+
+# Message to display if the list is empty
+noRecordsMessage: backend::lang.list.no_records
+
+# Records to display per page
+recordsPerPage: 20
+
+# Display checkboxes next to each record
+showCheckboxes: true
+
+# Toolbar widget configuration
+toolbar:
+  buttons: list_toolbar
+  search:
+    prompt: backend::lang.list.search_prompt

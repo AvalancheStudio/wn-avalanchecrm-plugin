@@ -1,0 +1,64 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    _download_pdf:
+        label: Download PDF
+        type: partial
+        path: $/avalanchestudio/avalanchecrm/controllers/invoices/_download_pdf_button.php
+        span: full
+        context: update
+
+    invoice_number:
+        label: Invoice Number
+        span: left
+        required: true
+    amount:
+        label: Amount
+        span: right
+        type: number
+        required: true
+    client:
+        label: Client
+        type: relation
+        span: left
+        nameFrom: name
+    project:
+        label: Project
+        type: relation
+        span: right
+        nameFrom: name
+    internal_status:
+        label: Workflow Stage
+        type: dropdown
+        span: left
+        default: draft
+        comment: Internal workflow stage â€” clients only see invoices marked as Sent.
+    status:
+        label: Payment Status
+        type: dropdown
+        span: right
+        default: outstanding
+        comment: Client-facing payment status.
+    issue_date:
+        label: Issue Date
+        type: datepicker
+        span: right
+    due_date:
+        label: Due Date
+        type: datepicker
+        span: left
+    notes:
+        label: Notes
+        type: textarea
+        span: full
+        comment: Optional notes or payment instructions to include on the invoice.
+
+tabs:
+    fields:
+        items:
+            label: Line Items
+            tab: Line Items
+            type: partial
+            path: $/avalanchestudio/avalanchecrm/controllers/invoices/_items_relation.php

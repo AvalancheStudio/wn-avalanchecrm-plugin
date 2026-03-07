@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Task
+
+# Model Form Field configuration
+form: $/avalanchestudio/avalanchecrm/models/task/fields.yaml
+
+# Model Class name
+modelClass: AvalancheStudio\AvalancheCRM\Models\Task
+
+# Default redirect location
+defaultRedirect: avalanchestudio/avalanchecrm/tasks
+
+# Create page
+create:
+  title: Create Task
+  redirect: avalanchestudio/avalanchecrm/tasks/update/:id
+  redirectClose: avalanchestudio/avalanchecrm/tasks
+
+# Update page
+update:
+  title: Edit Task
+  redirect: avalanchestudio/avalanchecrm/tasks
+  redirectClose: avalanchestudio/avalanchecrm/tasks
+
+# Preview page
+preview:
+  title: Preview Task

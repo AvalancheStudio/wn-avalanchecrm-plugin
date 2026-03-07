@@ -1,0 +1,57 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+  name:
+    label: Plan Name
+    span: left
+    required: true
+
+  price:
+    label: Price
+    type: number
+    span: right
+    step: 0.01
+    min: 0
+    required: true
+
+  billing_cycle:
+    label: Billing Cycle
+    type: dropdown
+    span: left
+    required: true
+    options:
+      monthly: Monthly
+      quarterly: Quarterly
+      annual: Annual
+
+  paypal_plan_id:
+    label: PayPal Plan ID
+    type: text
+    span: right
+    comment: Optional. Enter the PayPal Product/Plan ID if using PayPal Subscriptions.
+
+  stripe_price_id:
+    label: Stripe Price ID
+    type: text
+    span: left
+    comment: "Optional. Enter the Stripe Price ID (e.g. price_xxx) for recurring billing via Stripe Checkout."
+
+  is_active:
+    label: Active
+    type: switch
+    span: right
+    default: true
+
+  description:
+    label: Description
+    type: textarea
+    span: full
+    size: small
+
+  features:
+    label: Features
+    type: richeditor
+    span: full
+    comment: "List the features included in this plan."

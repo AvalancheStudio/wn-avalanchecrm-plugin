@@ -1,0 +1,103 @@
+{# Project List with Filter #}
+<div class="projects-filter">
+    <h2 class="projects-heading">My Projects</h2>
+    <div class="projects-filter-controls">
+        <label for="project-status-filter">Filter by status:</label>
+        <select id="project-status-filter" class="projects-select"
+            data-request="{{ __SELF__ }}::onFilterProjects"
+            data-request-data="status: this.value"
+            data-request-update="'{{ __SELF__ }}::list': '#projects-list'">
+            <option value="all">All Projects</option>
+            <option value="pending">Pending</option>
+            <option value="in_progress">In Progress</option>
+            <option value="on_hold">On Hold</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+        </select>
+    </div>
+</div>
+
+{% if projects is not empty %}
+    <div class="projects-grid">
+        {% for project in projects %}
+            <div class="projects-card">
+                <div class="projects-card-header">
+                    <h3 class="projects-card-title">{{ project.name }}</h3>
+                    <span class="projects-status projects-status--{{ project.status }}">
+                        {{ project.status|replace({'_': ' '})|title }}
+                    </span>
+                </div>
+
+                {% if project.description %}
+                    <p class="projects-card-description">
+                        {{ project.description|length > 120 ? project.description|slice(0, 120) ~ '...' : project.description }}
+                    </p>
+                {% endif %}
+
+                <div class="projects-card-meta">
+                    {% if project.start_date %}
+                        <span class="projects-meta-item">
+                            <i class="icon-calendar"></i> Start: {{ project.start_date|date('M d, Y') }}
+                        </span>
+                    {% endif %}
+                    {% if project.end_date %}
+                        <span class="projects-meta-item">
+                            <i class="icon-calendar-check-o"></i> Due: {{ project.end_date|date('M d, Y') }}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="projects-card-stats">
+                    {% if showTasks %}
+                        <span class="projects-stat">
+                            <i class="icon-check-square-o"></i> {{ project.tasks_count }} task{{ project.tasks_count != 1 ? 's' : '' }}
+                        </span>
+                    {% endif %}
+                    {% if showTickets %}
+                        <span class="projects-stat">
+                            <i class="icon-ticket"></i> {{ project.tickets_count }} ticket{{ project.tickets_count != 1 ? 's' : '' }}
+                        </span>
+                    {% endif %}
+                    {% if showInvoices %}
+                        <span class="projects-stat">
+                            <i class="icon-file-text-o"></i> {{ project.invoices_count }} invoice{{ project.invoices_count != 1 ? 's' : '' }}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="projects-card-actions">
+                    <button class="projects-btn projects-btn--primary"
+                        data-request="{{ __SELF__ }}::onViewProject"
+                        data-request-data="project_id: {{ project.id }}"
+                        data-request-update="'{{ __SELF__ }}::detail': '#projects-detail', '{{ __SELF__ }}::list': '#projects-list'"
+                        data-request-success="document.getElementById('projects-list').innerHTML = '';">
+                        View Details
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {# Pagination #}
+    {% if projects.lastPage > 1 %}
+        <div class="projects-pagination">
+            {% if projects.currentPage > 1 %}
+                <a href="{{ this.page.baseFileName|page }}?page={{ projects.currentPage - 1 }}" class="projects-btn projects-btn--outline">&laquo; Previous</a>
+            {% endif %}
+
+            <span class="projects-pagination-info">
+                Page {{ projects.currentPage }} of {{ projects.lastPage }}
+            </span>
+
+            {% if projects.currentPage < projects.lastPage %}
+                <a href="{{ this.page.baseFileName|page }}?page={{ projects.currentPage + 1 }}" class="projects-btn projects-btn--outline">Next &raquo;</a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+{% else %}
+    <div class="projects-empty">
+        <i class="icon-briefcase projects-empty-icon"></i>
+        <p>No projects found.</p>
+    </div>
+{% endif %}

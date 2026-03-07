@@ -1,0 +1,22 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+  name:
+    label: Name
+    span: left
+    required: true
+
+  email:
+    label: Email
+    span: right
+    required: true
+
+  phone:
+    label: Phone
+    span: left
+
+  job_title:
+    label: Job Title
+    span: right

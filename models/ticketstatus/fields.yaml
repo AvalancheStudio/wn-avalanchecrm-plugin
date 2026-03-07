@@ -1,0 +1,18 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+  name:
+    label: Name
+    span: left
+    required: true
+  color:
+    label: Color
+    type: colorpicker
+    span: right
+  is_default:
+    label: Default Status
+    type: switch
+    span: left
+    comment: If enabled, this status will be automatically assigned to new tickets.

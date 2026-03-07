@@ -1,0 +1,34 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Staff member
+
+# Model Form Structure
+form: $/avalanchestudio/avalanchecrm/models/staff/fields.yaml
+
+# Model Class name
+modelClass: AvalancheStudio\AvalancheCRM\Models\Staff
+
+# Default context
+defaultContext: create
+
+# Default redirect
+defaultRedirect: avalanchestudio/avalanchecrm/staff
+
+# Create page
+create:
+  title: Create Staff
+  redirect: avalanchestudio/avalanchecrm/staff
+  redirectClose: avalanchestudio/avalanchecrm/staff
+
+# Update page
+update:
+  title: Edit Staff
+  redirect: avalanchestudio/avalanchecrm/staff
+  redirectClose: avalanchestudio/avalanchecrm/staff
+
+# Preview page
+preview:
+  title: Preview Staff

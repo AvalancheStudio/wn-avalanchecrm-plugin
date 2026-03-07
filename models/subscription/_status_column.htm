@@ -1,0 +1,7 @@
+<span class="badge badge-{{
+    value == 'active' ? 'success' :
+    (value == 'pending' ? 'info' :
+    (value == 'past_due' ? 'warning' : 'secondary'))
+}}">
+    {{ ('avalanchestudio.avalanchecrm::lang.statuses.' ~ value)|trans }}
+</span>

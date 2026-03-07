@@ -1,0 +1,13 @@
+<div class="control-breadcrumb">
+    <ul>
+        <li><a href="<?= \Backend::url('avalanchestudio/avalanchecrm/activitylogs') ?>">Activity Logs</a></li>
+
+        <li>
+            <?= e($this->pageTitle) ?>
+        </li>
+    </ul>
+</div>
+
+<div id="list-view">
+    <?= $this->listRender() ?>
+</div>

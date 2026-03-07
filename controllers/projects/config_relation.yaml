@@ -1,0 +1,10 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+tasks:
+  label: Task
+  list: $/avalanchestudio/avalanchecrm/models/task/columns.yaml
+  form: $/avalanchestudio/avalanchecrm/models/task/fields.yaml
+  view:
+    toolbarButtons: create|delete

@@ -1,0 +1,45 @@
+<?php Block::put('breadcrumb') ?>
+<ul>
+    <li><a href="<?= Backend::url('avalanchestudio/avalanchecrm/tickettypes') ?>">Ticket Types</a></li>
+    <li>
+        <?= e($this->pageTitle) ?>
+    </li>
+</ul>
+<?php Block::endPut() ?>
+
+<?php if (!$this->fatalError): ?>
+
+    <?= $this->makePartial('$/avalanchestudio/avalanchecrm/controllers/tickets/_submenu.php') ?>
+
+    <?= Form::open(['class' => 'layout']) ?>
+
+    <div class="layout-row">
+        <?= $this->formRender() ?>
+    </div>
+
+    <div class="form-buttons">
+        <div class="loading-indicator-container">
+            <button type="submit" data-request="onSave" data-hotkey="ctrl+s, cmd+s" class="btn btn-primary">
+                Create
+            </button>
+            <button type="button" data-request="onSave" data-request-data="close:1" data-hotkey="ctrl+enter, cmd+enter"
+                class="btn btn-default">
+                Create and Close
+            </button>
+            <span class="btn-text">
+                or <a href="<?= Backend::url('avalanchestudio/avalanchecrm/tickettypes') ?>">Cancel</a>
+            </span>
+        </div>
+    </div>
+
+    <?= Form::close() ?>
+
+<?php else: ?>
+
+    <p class="flash-message static error">
+        <?= e($this->fatalError) ?>
+    </p>
+    <p><a href="<?= Backend::url('avalanchestudio/avalanchecrm/tickettypes') ?>" class="btn btn-default">Return to ticket
+            types list</a></p>
+
+<?php endif ?>

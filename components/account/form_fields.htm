@@ -1,0 +1,93 @@
+<div class="account-details-grid">
+    {# Personal Info Section #}
+    <div class="account-details-section">
+        <h3>Personal Information</h3>
+        <div class="account-details-row">
+            <div class="account-details-field">
+                <label for="acc-name">First Name</label>
+                <input type="text" id="acc-name" name="name" value="{{ user.name }}" class="account-details-input">
+                <span data-validate-for="name" class="account-details-error"></span>
+            </div>
+            <div class="account-details-field">
+                <label for="acc-surname">Surname</label>
+                <input type="text" id="acc-surname" name="surname" value="{{ user.surname }}" class="account-details-input">
+                <span data-validate-for="surname" class="account-details-error"></span>
+            </div>
+        </div>
+        <div class="account-details-row">
+            <div class="account-details-field">
+                <label for="acc-email">Email Address</label>
+                <input type="email" id="acc-email" name="email" value="{{ user.email }}" class="account-details-input">
+                <span data-validate-for="email" class="account-details-error"></span>
+            </div>
+        </div>
+    </div>
+
+    {# Contact Info Section #}
+    <div class="account-details-section">
+        <h3>Contact & Business</h3>
+        <div class="account-details-row">
+            <div class="account-details-field">
+                <label for="acc-phone">Phone Number</label>
+                <input type="text" id="acc-phone" name="phone" value="{{ user.phone }}" class="account-details-input">
+                <span data-validate-for="phone" class="account-details-error"></span>
+            </div>
+            <div class="account-details-field">
+                <label for="acc-mobile">Mobile Number</label>
+                <input type="text" id="acc-mobile" name="mobile" value="{{ user.mobile }}" class="account-details-input">
+                <span data-validate-for="mobile" class="account-details-error"></span>
+            </div>
+        </div>
+        <div class="account-details-row">
+            <div class="account-details-field">
+                <label for="acc-company">Company</label>
+                <input type="text" id="acc-company" name="company" value="{{ user.company }}" class="account-details-input">
+                <span data-validate-for="company" class="account-details-error"></span>
+            </div>
+        </div>
+    </div>
+
+    {# Address Section #}
+    <div class="account-details-section account-details-section--full">
+        <h3>Address Details</h3>
+        <div class="account-details-row">
+            <div class="account-details-field">
+                <label for="acc-address">Street Address</label>
+                <input type="text" id="acc-address" name="street_addr" value="{{ user.street_addr }}" class="account-details-input">
+                <span data-validate-for="street_addr" class="account-details-error"></span>
+            </div>
+        </div>
+        <div class="account-details-row">
+            <div class="account-details-field">
+                <label for="acc-city">City</label>
+                <input type="text" id="acc-city" name="city" value="{{ user.city }}" class="account-details-input">
+                <span data-validate-for="city" class="account-details-error"></span>
+            </div>
+            <div class="account-details-field">
+                <label for="acc-zip">ZIP / Postcode</label>
+                <input type="text" id="acc-zip" name="zip" value="{{ user.zip }}" class="account-details-input">
+                <span data-validate-for="zip" class="account-details-error"></span>
+            </div>
+        </div>
+    </div>
+
+    {# Marketing Preferences Section #}
+    {% if client %}
+    <div class="account-details-section account-details-section--full">
+        <h3>Marketing Preferences</h3>
+        <div class="account-details-row">
+            <div class="account-details-field">
+                <label class="account-details-checkbox">
+                    <input type="hidden" name="marketing_opt_out" value="0">
+                    <input type="checkbox" name="marketing_opt_out" value="1" {% if client.marketing_opt_out %}checked{% endif %}>
+                    <span>Opt out of marketing emails</span>
+                </label>
+                <small class="account-details-hint">
+                    When checked, you will not receive promotional or marketing emails. 
+                    You will still receive transactional emails such as invoices and account notifications.
+                </small>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>

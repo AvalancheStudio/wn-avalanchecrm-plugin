@@ -1,0 +1,39 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    id:
+        label: ID
+        searchable: true
+    subject:
+        label: Subject
+        searchable: true
+    client:
+        label: Client
+        relation: client
+        select: name
+        searchable: true
+    project:
+        label: Project
+        relation: project
+        select: name
+        searchable: true
+    category:
+        label: Category
+        relation: category
+        select: name
+        searchable: true
+    status_relation:
+        label: Status
+        relation: status_relation
+        select: name
+        searchable: true
+    ticket_type:
+        label: Type
+        relation: ticket_type
+        select: name
+        searchable: true
+    priority:
+        label: Priority
+        searchable: true

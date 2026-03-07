@@ -1,0 +1,28 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    name:
+        label: Name
+        span: left
+        required: true
+    email:
+        label: Email
+        span: right
+        type: email
+    phone:
+        label: Phone
+        span: left
+    company:
+        label: Company
+        span: right
+
+tabs:
+    fields:
+        marketing_opt_out:
+            label: Opted out of marketing emails
+            tab: Marketing
+            type: switch
+            default: false
+            comment: When enabled, this client will not receive any marketing campaign emails.

@@ -1,0 +1,292 @@
+<section class="subscriptions-section">
+    <h2 class="subscriptions-section__title">My Subscriptions</h2>
+
+    {% set activeSubscriptions = subscriptions|filter(s => s.status == 'active' or s.status == 'past_due') %}
+    {% set pendingSubscriptions = subscriptions|filter(s => s.status == 'pending') %}
+    {% set pastSubscriptions = subscriptions|filter(s => s.status == 'canceled') %}
+
+    {% if activeSubscriptions|length > 0 %}
+        <div class="subscriptions-grid">
+            {% for subscription in activeSubscriptions %}
+                <div class="subscription-card subscription-card--active">
+                    <div class="subscription-card__header">
+                        <h3 class="subscription-card__plan-name">{{ subscription.plan_name }}</h3>
+                        <span class="subscription-card__badge subscription-card__badge--{{ subscription.status }}">
+                            {{ ('avalanchestudio.avalanchecrm::lang.statuses.' ~ subscription.status)|trans }}
+                        </span>
+                    </div>
+
+                    <div class="subscription-card__body">
+                        <div class="subscription-card__amount">
+                            {{ currencySymbol }}{{ subscription.amount|number_format(2) }}
+                            <span class="subscription-card__cycle">/ {{ subscription.billing_cycle }}</span>
+                        </div>
+
+                        <div class="subscription-card__details">
+                            <div class="subscription-card__detail">
+                                <span class="subscription-card__label">Payment Method</span>
+                                <span class="subscription-card__value">
+                                    {% if subscription.payment_method == 'card' %}
+                                        <i class="icon-credit-card"></i> Card
+                                    {% elseif subscription.payment_method == 'direct_debit' %}
+                                        <i class="icon-bank"></i> Direct Debit
+                                    {% elseif subscription.payment_method == 'paypal' %}
+                                        <i class="icon-paypal"></i> PayPal
+                                    {% else %}
+                                        {{ subscription.payment_method|default('N/A') }}
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                            <div class="subscription-card__detail">
+                                <span class="subscription-card__label">Next Billing</span>
+                                <span class="subscription-card__value">
+                                    {{ subscription.next_billing_date ? subscription.next_billing_date|date('M d, Y') : 'N/A' }}
+                                </span>
+                            </div>
+
+                            <div class="subscription-card__detail">
+                                <span class="subscription-card__label">Started</span>
+                                <span class="subscription-card__value">{{ subscription.created_at|date('M d, Y') }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subscription-card__actions">
+                        {# Change Payment Method #}
+                        <button
+                            type="button"
+                            class="subscriptions-btn subscriptions-btn--secondary btn-change-payment"
+                            data-subscription-id="{{ subscription.id }}"
+                            data-current-method="{{ subscription.payment_method }}"
+                        >
+                            Change Payment
+                        </button>
+
+                        {# Change Plan #}
+                        {% if plans|length > 1 %}
+                            <button
+                                type="button"
+                                class="subscriptions-btn subscriptions-btn--outline btn-change-plan"
+                                data-subscription-id="{{ subscription.id }}"
+                                data-current-plan-id="{{ subscription.plan_id }}"
+                            >
+                                Change Plan
+                            </button>
+                        {% endif %}
+
+                        {# Cancel #}
+                        <button
+                            type="button"
+                            class="subscriptions-btn subscriptions-btn--danger btn-cancel-subscription"
+                            data-subscription-id="{{ subscription.id }}"
+                            data-plan-name="{{ subscription.plan_name }}"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="subscriptions-empty">
+            <div class="subscriptions-empty__icon">
+                <i class="icon-refresh"></i>
+            </div>
+            <p class="subscriptions-empty__text">You don't have any active subscriptions.</p>
+            {% if showPlans and plans|length > 0 %}
+                <p class="subscriptions-empty__hint">Browse the plans below to get started.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {# Pending Subscriptions (awaiting payment) #}
+    {% if pendingSubscriptions|length > 0 %}
+        <div class="subscriptions-pending">
+            <h3 class="subscriptions-past__title">Pending Payment</h3>
+            {% for subscription in pendingSubscriptions %}
+                <div class="subscription-card subscription-card--pending">
+                    <div class="subscription-card__header">
+                        <h3 class="subscription-card__plan-name">{{ subscription.plan_name }}</h3>
+                        <span class="subscription-card__badge subscription-card__badge--pending">Pending</span>
+                    </div>
+                    <div class="subscription-card__body">
+                        <div class="subscription-card__amount">
+                            {{ currencySymbol }}{{ subscription.amount|number_format(2) }}
+                            <span class="subscription-card__cycle">/ {{ subscription.billing_cycle }}</span>
+                        </div>
+                        <p class="subscription-card__pending-note">
+                            <i class="icon-clock-o"></i>
+                            This subscription is awaiting payment confirmation. You can continue with your payment or cancel if you no longer wish to subscribe.
+                        </p>
+                    </div>
+                    <div class="subscription-card__actions">
+                        <button
+                            type="button"
+                            class="subscriptions-btn subscriptions-btn--primary btn-resume-payment"
+                            data-subscription-id="{{ subscription.id }}"
+                        >
+                            Continue Payment
+                        </button>
+                        <button
+                            type="button"
+                            class="subscriptions-btn subscriptions-btn--danger btn-cancel-subscription"
+                            data-subscription-id="{{ subscription.id }}"
+                            data-plan-name="{{ subscription.plan_name }}"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {# Past / Canceled Subscriptions #}
+    {% if pastSubscriptions|length > 0 %}
+        <div class="subscriptions-past">
+            <h3 class="subscriptions-past__title">Past Subscriptions</h3>
+            <table class="subscriptions-table">
+                <thead>
+                    <tr>
+                        <th>Plan</th>
+                        <th>Amount</th>
+                        <th>Cycle</th>
+                        <th>Status</th>
+                        <th>Ended</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subscription in pastSubscriptions %}
+                        <tr>
+                            <td>{{ subscription.plan_name }}</td>
+                            <td>{{ currencySymbol }}{{ subscription.amount|number_format(2) }}</td>
+                            <td>{{ subscription.billing_cycle|capitalize }}</td>
+                            <td>
+                                <span class="subscription-card__badge subscription-card__badge--{{ subscription.status }}">
+                                    {{ ('avalanchestudio.avalanchecrm::lang.statuses.' ~ subscription.status)|trans }}
+                                </span>
+                            </td>
+                            <td>{{ subscription.updated_at|date('M d, Y') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</section>
+
+{# Modal: Change Payment Method #}
+<div class="subscriptions-modal" id="modal-change-payment" style="display:none;">
+    <div class="subscriptions-modal__overlay"></div>
+    <div class="subscriptions-modal__dialog">
+        <div class="subscriptions-modal__header">
+            <h3>Change Payment Method</h3>
+            <button type="button" class="subscriptions-modal__close">&times;</button>
+        </div>
+        <form data-request="{{ __SELF__ }}::onUpdatePaymentMethod" data-request-flash>
+            <div class="subscriptions-modal__body">
+                <input type="hidden" name="subscription_id" id="change-payment-subscription-id" value="">
+
+                <div class="subscriptions-form-group">
+                    <label>Select Payment Method</label>
+                    <div class="subscriptions-payment-options">
+                        {% if stripeEnabled %}
+                            <label class="subscriptions-payment-option">
+                                <input type="radio" name="payment_method" value="card">
+                                <span class="subscriptions-payment-option__label">
+                                    <i class="icon-credit-card"></i> Card (Stripe)
+                                    <small class="subscriptions-payment-option__hint">You'll be redirected to Stripe to manage your card</small>
+                                </span>
+                            </label>
+                        {% endif %}
+                        {% if gocardlessEnabled %}
+                            <label class="subscriptions-payment-option">
+                                <input type="radio" name="payment_method" value="direct_debit">
+                                <span class="subscriptions-payment-option__label">
+                                    <i class="icon-bank"></i> Direct Debit (GoCardless)
+                                    <small class="subscriptions-payment-option__hint">You'll be redirected to GoCardless to set up your bank mandate</small>
+                                </span>
+                            </label>
+                        {% endif %}
+                        {% if paypalEnabled %}
+                            <label class="subscriptions-payment-option">
+                                <input type="radio" name="payment_method" value="paypal">
+                                <span class="subscriptions-payment-option__label">
+                                    <i class="icon-paypal"></i> PayPal
+                                    <small class="subscriptions-payment-option__hint">You'll be redirected to PayPal to approve your payment</small>
+                                </span>
+                            </label>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+            <div class="subscriptions-modal__footer">
+                <button type="button" class="subscriptions-btn subscriptions-btn--secondary subscriptions-modal__close-btn">Cancel</button>
+                <button type="submit" class="subscriptions-btn subscriptions-btn--primary">Update Payment</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{# Modal: Change Plan #}
+<div class="subscriptions-modal" id="modal-change-plan" style="display:none;">
+    <div class="subscriptions-modal__overlay"></div>
+    <div class="subscriptions-modal__dialog">
+        <div class="subscriptions-modal__header">
+            <h3>Change Subscription Plan</h3>
+            <button type="button" class="subscriptions-modal__close">&times;</button>
+        </div>
+        <form data-request="{{ __SELF__ }}::onChangePlan" data-request-flash>
+            <div class="subscriptions-modal__body">
+                <input type="hidden" name="subscription_id" id="change-plan-subscription-id" value="">
+
+                <div class="subscriptions-form-group">
+                    <label>Select a New Plan</label>
+                    <div class="subscriptions-plan-selector">
+                        {% for plan in plans %}
+                            <label class="subscriptions-plan-option" data-plan-id="{{ plan.id }}">
+                                <input type="radio" name="plan_id" value="{{ plan.id }}">
+                                <span class="subscriptions-plan-option__content">
+                                    <strong>{{ plan.name }}</strong>
+                                    <span class="subscriptions-plan-option__price">
+                                        {{ currencySymbol }}{{ plan.price|number_format(2) }} / {{ plan.billing_cycle }}
+                                    </span>
+                                    {% if plan.description %}
+                                        <span class="subscriptions-plan-option__desc">{{ plan.description }}</span>
+                                    {% endif %}
+                                </span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="subscriptions-modal__footer">
+                <button type="button" class="subscriptions-btn subscriptions-btn--secondary subscriptions-modal__close-btn">Cancel</button>
+                <button type="submit" class="subscriptions-btn subscriptions-btn--primary">Change Plan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{# Modal: Cancel Confirmation #}
+<div class="subscriptions-modal" id="modal-cancel-subscription" style="display:none;">
+    <div class="subscriptions-modal__overlay"></div>
+    <div class="subscriptions-modal__dialog subscriptions-modal__dialog--small">
+        <div class="subscriptions-modal__header">
+            <h3>Cancel Subscription</h3>
+            <button type="button" class="subscriptions-modal__close">&times;</button>
+        </div>
+        <form data-request="{{ __SELF__ }}::onCancelSubscription" data-request-flash>
+            <div class="subscriptions-modal__body">
+                <input type="hidden" name="subscription_id" id="cancel-subscription-id" value="">
+                <p>Are you sure you want to cancel your <strong id="cancel-plan-name"></strong> subscription? This action cannot be undone.</p>
+            </div>
+            <div class="subscriptions-modal__footer">
+                <button type="button" class="subscriptions-btn subscriptions-btn--secondary subscriptions-modal__close-btn">Keep Subscription</button>
+                <button type="submit" class="subscriptions-btn subscriptions-btn--danger">Yes, Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,370 @@
+<?php $settings = \AvalancheStudio\AvalancheCRM\Models\Settings::instance(); ?>
+<div class="layout-row min-height-0">
+    <div class="layout-cell">
+        <div class="padded-container">
+            <div class="dashboard-stats-bar">
+                <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/clients') ?>" class="dash-stat">
+                    <span class="dash-stat-number"><?= $totalClients ?></span>
+                    <span class="dash-stat-label">Clients</span>
+                </a>
+
+                <?php if ($settings->enable_projects): ?>
+                    <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/projects') ?>?status=active"
+                        class="dash-stat">
+                        <span class="dash-stat-number"><?= $activeProjects ?></span>
+                        <span class="dash-stat-label">Active Projects</span>
+                    </a>
+                <?php endif; ?>
+
+                <?php if ($settings->enable_tickets): ?>
+                    <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/tickets') ?>?status=open"
+                        class="dash-stat">
+                        <span class="dash-stat-number"><?= $openTickets ?></span>
+                        <span class="dash-stat-label">Open Tickets</span>
+                    </a>
+                <?php endif; ?>
+
+                <?php if ($settings->enable_invoices): ?>
+                    <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/invoices') ?>?status=outstanding"
+                        class="dash-stat">
+                        <span class="dash-stat-number"><?= $unpaidInvoices ?></span>
+                        <span class="dash-stat-label">Unpaid Invoices</span>
+                    </a>
+                <?php endif; ?>
+
+                <?php if ($settings->enable_subscriptions): ?>
+                    <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/subscriptions') ?>?status=active"
+                        class="dash-stat">
+                        <span class="dash-stat-number"><?= $activeSubscriptions ?></span>
+                        <span class="dash-stat-label">Subscriptions</span>
+                    </a>
+                <?php endif; ?>
+
+                <?php if ($settings->enable_projects): ?>
+                    <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/tasks') ?>?status=todo"
+                        class="dash-stat">
+                        <span class="dash-stat-number"><?= $pendingTasks ?></span>
+                        <span class="dash-stat-label">Pending Tasks</span>
+                    </a>
+                <?php endif; ?>
+
+                <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/staff') ?>" class="dash-stat">
+                    <span class="dash-stat-number"><?= $totalStaff ?></span>
+                    <span class="dash-stat-label">Staff</span>
+                </a>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Clients Card -->
+                <div class="dashboard-card border-success">
+                    <div class="card-header">
+                        <i class="icon-users"></i>
+                        <h4>Clients</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Manage your client database and relationships.</p>
+                        <div class="card-actions">
+                            <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/clients') ?>"
+                                class="btn btn-sm btn-primary">Manage Clients</a>
+                            <a href="<?= \Backend\Facades\Backend::url('winter/user/users/create?is_client=1') ?>"
+                                class="btn btn-sm btn-secondary">Add Client</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Staff Card -->
+                <div class="dashboard-card border-info">
+                    <div class="card-header">
+                        <i class="icon-user-tie"></i>
+                        <h4>Staff</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Track team members, departments and job titles.</p>
+                        <div class="card-actions">
+                            <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/staff') ?>"
+                                class="btn btn-sm btn-primary">Manage Staff</a>
+                            <a href="<?= \Backend\Facades\Backend::url('winter/user/users/create?is_staff=1') ?>"
+                                class="btn btn-sm btn-secondary">Add Staff</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projects Card -->
+                <?php if ($settings->enable_projects): ?>
+                    <div class="dashboard-card border-warning">
+                        <div class="card-header">
+                            <i class="icon-briefcase"></i>
+                            <h4>Projects</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Track project progress, tasks and deliverables.</p>
+                            <div class="card-actions">
+                                <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/projects') ?>"
+                                    class="btn btn-sm btn-primary">Manage Projects</a>
+                                <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/projects/create') ?>"
+                                    class="btn btn-sm btn-secondary">New Project</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Tickets Card -->
+                <?php if ($settings->enable_tickets): ?>
+                    <div class="dashboard-card border-danger">
+                        <div class="card-header">
+                            <i class="icon-ticket"></i>
+                            <h4>Tickets</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Monitor and respond to client support requests.</p>
+                            <div class="card-actions">
+                                <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/tickets') ?>"
+                                    class="btn btn-sm btn-primary">All Tickets</a>
+                                <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/tickets/create') ?>"
+                                    class="btn btn-sm btn-secondary">New Ticket</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Invoices Card -->
+                <?php if ($settings->enable_invoices): ?>
+                    <div class="dashboard-card border-primary">
+                        <div class="card-header">
+                            <i class="icon-file-text-o"></i>
+                            <h4>Invoices</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Generate and manage billing and payments.</p>
+                            <div class="card-actions">
+                                <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/invoices') ?>"
+                                    class="btn btn-sm btn-primary">All Invoices</a>
+                                <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/invoices/create') ?>"
+                                    class="btn btn-sm btn-secondary">New Invoice</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Subscriptions Card -->
+                <?php if ($settings->enable_subscriptions): ?>
+                    <div class="dashboard-card border-secondary">
+                        <div class="card-header">
+                            <i class="icon-refresh"></i>
+                            <h4>Subscriptions</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Recurring billing plans and client subscriptions.</p>
+                            <div class="card-actions">
+                                <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/subscriptions') ?>"
+                                    class="btn btn-sm btn-primary">Active Subscriptions</a>
+                                <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/subscriptionplans') ?>"
+                                    class="btn btn-sm btn-secondary">Manage Plans</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Campaigns Card -->
+                <?php if ($settings->enable_marketing): ?>
+                    <div class="dashboard-card border-marketing">
+                        <div class="card-header">
+                            <i class="icon-bullhorn"></i>
+                            <h4>Campaigns</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Create and send email campaigns to your clients.</p>
+                            <div class="card-actions">
+                                <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/campaigns') ?>"
+                                    class="btn btn-sm btn-primary">All Campaigns</a>
+                                <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/campaigns/create') ?>"
+                                    class="btn btn-sm btn-secondary">New Campaign</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Email Templates Card -->
+                <?php if ($settings->enable_marketing): ?>
+                    <div class="dashboard-card border-template">
+                        <div class="card-header">
+                            <i class="icon-file-code-o"></i>
+                            <h4>Email Templates</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Design reusable email templates for your campaigns.</p>
+                            <div class="card-actions">
+                                <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/emailtemplates') ?>"
+                                    class="btn btn-sm btn-primary">All Templates</a>
+                                <a href="<?= \Backend\Facades\Backend::url('avalanchestudio/avalanchecrm/emailtemplates/create') ?>"
+                                    class="btn btn-sm btn-secondary">New Template</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .dashboard-stats-bar {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 12px;
+        margin-bottom: 28px;
+    }
+
+    a.dash-stat {
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        padding: 18px 12px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        border-left: 3px solid #5fb4ef;
+        text-decoration: none;
+        transition: transform 0.15s, box-shadow 0.15s;
+        cursor: pointer;
+    }
+
+    a.dash-stat:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        text-decoration: none;
+    }
+
+    .dash-stat:nth-child(2) {
+        border-left-color: #f1c40f;
+    }
+
+    .dash-stat:nth-child(3) {
+        border-left-color: #e74c3c;
+    }
+
+    .dash-stat:nth-child(4) {
+        border-left-color: #2b3e50;
+    }
+
+    .dash-stat:nth-child(5) {
+        border-left-color: #95a5a6;
+    }
+
+    .dash-stat:nth-child(6) {
+        border-left-color: #8e44ad;
+    }
+
+    .dash-stat:nth-child(7) {
+        border-left-color: #3498db;
+    }
+
+    .dash-stat-number {
+        font-size: 30px;
+        font-weight: 700;
+        color: #2b3e50;
+        line-height: 1;
+    }
+
+    .dash-stat-label {
+        font-size: 11px;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .dashboard-card {
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        border-top: 4px solid #ddd;
+        transition: transform 0.2s;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-card.border-success {
+        border-top-color: #5fb4ef;
+    }
+
+    .dashboard-card.border-info {
+        border-top-color: #3498db;
+    }
+
+    .dashboard-card.border-warning {
+        border-top-color: #f1c40f;
+    }
+
+    .dashboard-card.border-danger {
+        border-top-color: #e74c3c;
+    }
+
+    .dashboard-card.border-primary {
+        border-top-color: #2b3e50;
+    }
+
+    .dashboard-card.border-secondary {
+        border-top-color: #95a5a6;
+    }
+
+    .dashboard-card.border-marketing {
+        border-top-color: #8e44ad;
+    }
+
+    .dashboard-card.border-template {
+        border-top-color: #16a085;
+    }
+
+    .card-header {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+    }
+
+    .card-header i {
+        font-size: 24px;
+        margin-right: 15px;
+        color: #555;
+    }
+
+    .card-header h4 {
+        margin: 0;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .card-body {
+        padding: 20px;
+        flex-grow: 1;
+    }
+
+    .card-body p {
+        color: #666;
+        margin-bottom: 20px;
+        min-height: 40px;
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .m-b-lg {
+        margin-bottom: 30px;
+    }
+</style>

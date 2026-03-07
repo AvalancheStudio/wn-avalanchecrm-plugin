@@ -1,0 +1,32 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    id:
+        label: ID
+        searchable: true
+    name:
+        label: Name
+        searchable: true
+    subject:
+        label: Subject
+        searchable: true
+    status:
+        label: Status
+        type: text
+    scheduled_at:
+        label: Scheduled
+        type: datetime
+    sent_at:
+        label: Sent
+        type: datetime
+    total_recipients:
+        label: Recipients
+        type: number
+    sent_count:
+        label: Sent OK
+        type: number
+    failed_count:
+        label: Failed
+        type: number

@@ -1,0 +1,312 @@
+{# Tasks Tab #}
+<div class="projects-section" id="projects-tasks">
+    <h3 class="projects-section-title">
+        <i class="icon-check-square-o"></i> Tasks
+        <span class="projects-section-count">{{ activeProject.tasks|length }}</span>
+    </h3>
+
+    {% if activeProject.tasks is not empty %}
+
+        {# Task Progress Bar #}
+        {% set totalTasks = activeProject.tasks|length %}
+        {% set doneTasks = activeProject.tasks|filter(t => t.status == 'done')|length %}
+        {% set progressPercent = totalTasks > 0 ? ((doneTasks / totalTasks) * 100)|round : 0 %}
+
+        <div class="projects-progress">
+            <div class="projects-progress-bar" style="width: {{ progressPercent }}%"></div>
+            <span class="projects-progress-label">{{ progressPercent }}% complete ({{ doneTasks }}/{{ totalTasks }})</span>
+        </div>
+
+        <div class="projects-table-responsive">
+            <table class="projects-table">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Assigned To</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Time</th>
+                        <th>Due Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in activeProject.tasks %}
+                        <tr class="projects-task-row projects-task-row--{{ task.status }} {{ task.timer_running ? 'projects-task-row--timing' : '' }}" id="task-row-{{ task.id }}">
+                            <td>
+                                <strong>{{ task.title }}</strong>
+                                {% if task.description %}
+                                    {% set plainDesc = task.description|striptags %}
+                                    <br><small class="projects-task-desc">{{ plainDesc|length > 80 ? plainDesc|slice(0, 80) ~ '...' : plainDesc }}</small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if taskAssignees[task.id] is defined %}
+                                    <span class="projects-assigned">
+                                        <i class="icon-user"></i> {{ taskAssignees[task.id] }}
+                                    </span>
+                                {% else %}
+                                    <span class="projects-muted">Unassigned</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="projects-badge projects-badge--{{ task.status }}">
+                                    {{ task.status|replace({'_': ' '})|title }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="projects-priority projects-priority--{{ task.priority }}">
+                                    {{ task.priority|title }}
+                                </span>
+                            </td>
+                            <td class="projects-task-time">
+                                {% if task.timer_running %}
+                                    <span class="projects-timer projects-timer--running"
+                                          data-task-timer
+                                          data-elapsed="{{ task.timer_elapsed_seconds }}">
+                                        <i class="icon-clock-o"></i>
+                                        <span class="projects-timer-clock">00:00:00</span>
+                                    </span>
+                                    <button type="button"
+                                        class="projects-btn projects-btn--tiny projects-btn--danger"
+                                        data-request="{{ __SELF__ }}::onStopTaskTimer"
+                                        data-request-data="task_id: {{ task.id }}, project_id: {{ activeProject.id }}"
+                                        data-request-flash
+                                        title="Stop Timer">
+                                        <i class="icon-stop"></i>
+                                    </button>
+                                {% elseif task.hours > 0 %}
+                                    <span class="projects-timer">
+                                        <i class="icon-hourglass-half"></i> {{ task.formatted_hours }}
+                                    </span>
+                                    <button type="button"
+                                        class="projects-btn projects-btn--tiny projects-btn--success"
+                                        data-request="{{ __SELF__ }}::onStartTaskTimer"
+                                        data-request-data="task_id: {{ task.id }}, project_id: {{ activeProject.id }}"
+                                        data-request-flash
+                                        title="Start Timer">
+                                        <i class="icon-play"></i>
+                                    </button>
+                                {% else %}
+                                    <button type="button"
+                                        class="projects-btn projects-btn--tiny projects-btn--outline"
+                                        data-request="{{ __SELF__ }}::onStartTaskTimer"
+                                        data-request-data="task_id: {{ task.id }}, project_id: {{ activeProject.id }}"
+                                        data-request-flash
+                                        title="Start Timer">
+                                        <i class="icon-play"></i> Start
+                                    </button>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if task.due_date %}
+                                    {{ task.due_date|date('M d, Y') }}
+                                {% else %}
+                                    <span class="projects-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td class="projects-task-actions">
+                                <button class="projects-btn projects-btn--small projects-btn--outline"
+                                    onclick="toggleTaskEdit({{ task.id }})">
+                                    <i class="icon-pencil"></i> Edit
+                                </button>
+                            </td>
+                        </tr>
+
+                        {# Inline Edit Row #}
+                        <tr class="projects-edit-row" id="task-edit-{{ task.id }}" style="display: none;">
+                            <td colspan="7">
+                                <form class="projects-edit-form"
+                                    data-request="{{ __SELF__ }}::onUpdateTask"
+                                    data-request-data="task_id: {{ task.id }}, project_id: {{ activeProject.id }}"
+                                    data-request-flash>
+
+                                    <div class="projects-edit-grid">
+                                        <div class="projects-edit-field">
+                                            <label>Title</label>
+                                            <input type="text" name="task[title]" value="{{ task.title }}" class="projects-input" required />
+                                        </div>
+
+                                        <div class="projects-edit-field">
+                                            <label>Assigned To</label>
+                                            <select name="task[assigned_to_id]" class="projects-select">
+                                                <option value="">Unassigned</option>
+                                                {% for staff in projectStaff %}
+                                                    <option value="{{ staff.id }}" {{ task.assigned_to_id == staff.id ? 'selected' }}>{{ staff.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <div class="projects-edit-field">
+                                            <label>Status</label>
+                                            <select name="task[status]" class="projects-select">
+                                                <option value="todo" {{ task.status == 'todo' ? 'selected' }}>To Do</option>
+                                                <option value="in_progress" {{ task.status == 'in_progress' ? 'selected' }}>In Progress</option>
+                                                <option value="review" {{ task.status == 'review' ? 'selected' }}>Review</option>
+                                                <option value="done" {{ task.status == 'done' ? 'selected' }}>Done</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="projects-edit-field">
+                                            <label>Priority</label>
+                                            <select name="task[priority]" class="projects-select">
+                                                <option value="low" {{ task.priority == 'low' ? 'selected' }}>Low</option>
+                                                <option value="medium" {{ task.priority == 'medium' ? 'selected' }}>Medium</option>
+                                                <option value="high" {{ task.priority == 'high' ? 'selected' }}>High</option>
+                                                <option value="urgent" {{ task.priority == 'urgent' ? 'selected' }}>Urgent</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="projects-edit-field">
+                                            <label>Due Date</label>
+                                            <input type="date" name="task[due_date]" value="{{ task.due_date ? task.due_date|date('Y-m-d') : '' }}" class="projects-input" />
+                                        </div>
+
+                                        <div class="projects-edit-field projects-edit-field--full">
+                                            <label>Description</label>
+                                            <div class="projects-richtext-toolbar">
+                                                <button type="button" onclick="document.execCommand('bold')" title="Bold"><b>B</b></button>
+                                                <button type="button" onclick="document.execCommand('italic')" title="Italic"><i>I</i></button>
+                                                <button type="button" onclick="document.execCommand('underline')" title="Underline"><u>U</u></button>
+                                                <span class="projects-richtext-sep"></span>
+                                                <button type="button" onclick="document.execCommand('insertUnorderedList')" title="Bullet List"><i class="icon-list-ul"></i></button>
+                                                <button type="button" onclick="document.execCommand('insertOrderedList')" title="Numbered List"><i class="icon-list-ol"></i></button>
+                                                <span class="projects-richtext-sep"></span>
+                                                <button type="button" onclick="insertLink()" title="Insert Link"><i class="icon-link"></i></button>
+                                                <button type="button" onclick="document.execCommand('removeFormat')" title="Clear Formatting"><i class="icon-eraser"></i></button>
+                                            </div>
+                                            <div class="projects-richtext-content"
+                                                contenteditable="true"
+                                                id="task-desc-editor-{{ task.id }}"
+                                                oninput="document.getElementById('task-desc-input-{{ task.id }}').value = this.innerHTML">{{ task.description|raw }}</div>
+                                            <input type="hidden" name="task[description]" id="task-desc-input-{{ task.id }}" value="{{ task.description }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="projects-edit-actions">
+                                        <button type="submit" class="projects-btn projects-btn--primary projects-btn--small">
+                                            <i class="icon-check"></i> Save
+                                        </button>
+                                        <button type="button" class="projects-btn projects-btn--outline projects-btn--small"
+                                            onclick="toggleTaskEdit({{ task.id }})">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="projects-empty-section">No tasks have been created for this project yet.</p>
+    {% endif %}
+</div>
+
+<style>
+.projects-task-row--timing {
+    background: rgba(39, 174, 96, 0.04);
+}
+.projects-task-time {
+    white-space: nowrap;
+}
+.projects-timer {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: #666;
+}
+.projects-timer--running {
+    color: #27ae60;
+    font-weight: 600;
+}
+.projects-timer--running .projects-timer-clock {
+    font-family: 'Courier New', Courier, monospace;
+    animation: timerPulse 1.5s ease-in-out infinite;
+}
+@keyframes timerPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+.projects-btn--tiny {
+    padding: 2px 6px;
+    font-size: 11px;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-left: 4px;
+}
+.projects-btn--success {
+    background: #27ae60;
+    color: #fff;
+}
+.projects-btn--success:hover {
+    background: #219a52;
+}
+.projects-btn--danger {
+    background: #e74c3c;
+    color: #fff;
+}
+.projects-btn--danger:hover {
+    background: #c0392b;
+}
+</style>
+
+<script>
+function toggleTaskEdit(taskId) {
+    var editRow = document.getElementById('task-edit-' + taskId);
+    if (editRow) {
+        editRow.style.display = editRow.style.display === 'none' ? 'table-row' : 'none';
+    }
+}
+
+function insertLink() {
+    var url = prompt('Enter URL:', 'https://');
+    if (url) {
+        document.execCommand('createLink', false, url);
+    }
+}
+
+// Ensure richtext content is synced before AJAX requests
+document.addEventListener('ajaxSetup', function(event) {
+    var form = event.target;
+    if (form && form.classList && form.classList.contains('projects-edit-form')) {
+        var editor = form.querySelector('.projects-richtext-content');
+        var hidden = form.querySelector('input[name="task[description]"]');
+        if (editor && hidden) {
+            hidden.value = editor.innerHTML;
+        }
+    }
+});
+
+// Live timer countdown for running task timers
+(function() {
+    var timerEls = document.querySelectorAll('[data-task-timer]');
+    timerEls.forEach(function(el) {
+        var elapsed = parseInt(el.getAttribute('data-elapsed') || '0', 10);
+        var clockEl = el.querySelector('.projects-timer-clock');
+        if (!clockEl) return;
+
+        function formatTime(totalSeconds) {
+            var h = Math.floor(totalSeconds / 3600);
+            var m = Math.floor((totalSeconds % 3600) / 60);
+            var s = totalSeconds % 60;
+            return (h < 10 ? '0' : '') + h + ':' +
+                   (m < 10 ? '0' : '') + m + ':' +
+                   (s < 10 ? '0' : '') + s;
+        }
+
+        clockEl.textContent = formatTime(elapsed);
+
+        setInterval(function() {
+            elapsed++;
+            clockEl.textContent = formatTime(elapsed);
+        }, 1000);
+    });
+})();
+</script>

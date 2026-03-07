@@ -1,0 +1,40 @@
+{% set user = user %}
+
+{{ themeStyles|raw }}
+
+<div class="invoices-wrapper" id="invoices-wrapper">
+
+    {% if not user %}
+        <div class="invoices-alert invoices-alert--warning">
+            <p>Please <a href="{{ 'account'|page }}">sign in</a> to view your invoices.</p>
+        </div>
+    {% elseif not client %}
+        <div class="invoices-alert invoices-alert--warning">
+            <p>No client profile is associated with your account. Please contact support.</p>
+        </div>
+    {% else %}
+
+        {# Flash Messages #}
+        {% flash %}
+            <div class="invoices-alert invoices-alert--{{ type }}">
+                {{ message }}
+            </div>
+        {% endflash %}
+
+        {# Invoice Detail View #}
+        <div id="invoices-detail">
+            {% if activeInvoice %}
+                {% partial __SELF__ ~ '::detail' %}
+            {% endif %}
+        </div>
+
+        {# Invoice List View #}
+        <div id="invoices-list">
+            {% if not activeInvoice %}
+                {% partial __SELF__ ~ '::list' %}
+            {% endif %}
+        </div>
+
+    {% endif %}
+
+</div>

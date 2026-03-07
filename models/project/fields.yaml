@@ -1,0 +1,88 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    name:
+        label: Name
+        span: auto
+        required: true
+    status:
+        label: Status
+        type: dropdown
+        span: auto
+        options:
+            pending: Pending
+            active: Active
+            completed: Completed
+            hold: On Hold
+        default: pending
+    start_date:
+        label: Start Date
+        type: datepicker
+        span: left
+    end_date:
+        label: End Date
+        type: datepicker
+        span: right
+    description:
+        label: Description
+        type: textarea
+        span: full
+
+tabs:
+    fields:
+        billing_type:
+            label: Billing Type
+            tab: Billing
+            type: dropdown
+            span: left
+            default: non_billable
+        hourly_rate:
+            label: Hourly Rate
+            tab: Billing
+            type: number
+            span: right
+            comment: Default hourly rate for tasks in this project.
+            trigger:
+                action: show
+                field: billing_type
+                condition: value[hourly]
+        fixed_price:
+            label: Fixed Price
+            tab: Billing
+            type: number
+            span: right
+            comment: Total fixed price for the project.
+            trigger:
+                action: show
+                field: billing_type
+                condition: value[fixed]
+        _generate_invoice:
+            tab: Billing
+            type: partial
+            path: $/avalanchestudio/avalanchecrm/controllers/projects/_generate_invoice_button.php
+            span: full
+            context: update
+        clients:
+            label: Assigned Clients
+            tab: Assignments
+            type: taglist
+            mode: relation
+            nameFrom: name
+            span: left
+            comment: Type to search and select clients associated with this project.
+        staff:
+            label: Staff Assignments
+            tab: Assignments
+            type: taglist
+            mode: relation
+            nameFrom: name
+            select: concat(name, ' ', surname)
+            span: right
+            comment: Type to search and select staff members assigned to this project.
+        tasks:
+            label: Project Tasks
+            tab: Tasks
+            type: partial
+            path: $/avalanchestudio/avalanchecrm/controllers/projects/_kanban_tab.php

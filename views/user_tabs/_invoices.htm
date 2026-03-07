@@ -1,0 +1,59 @@
+<?php 
+use Backend\Facades\Backend;
+use AvalancheStudio\AvalancheCRM\Models\Settings;
+
+$client = $formModel->client; 
+$settings = Settings::instance();
+$symbol = $settings->currency_symbol ?: '$';
+?>
+<?php if ($client): ?>
+<?php $invoices = $client->invoices()->orderBy('created_at', 'desc')->get(); ?>
+<div class="control-list mt-3">
+    <table class="table data">
+        <thead>
+            <tr>
+                <th><span>Invoice #</span></th>
+                <th><span>Amount</span></th>
+                <th><span>Status</span></th>
+                <th><span>Date</span></th>
+                <th style="width: 50px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($invoices->count() > 0): ?>
+            <?php foreach ($invoices as $invoice): ?>
+            <tr>
+                <td>
+                    <?= e($invoice->invoice_number) ?>
+                </td>
+                <td>
+                    <?= e($symbol) ?>
+                    <?= number_format($invoice->amount, 2) ?>
+                </td>
+                <td>
+                    <span class="badge badge-<?= $invoice->status == 'paid' ? 'success' : 'warning' ?>">
+                        <?= e(ucfirst($invoice->status)) ?>
+                    </span>
+                </td>
+                <td>
+                    <?= $invoice->issue_date ? $invoice->issue_date->format('M d, Y') : '' ?>
+                </td>
+                <td>
+                    <a href="<?= Backend::url('avalanchestudio/avalanchecrm/invoices/update/' . $invoice->id) ?>"
+                        class="btn btn-xs btn-secondary">
+                        <i class="icon-pencil"></i>
+                    </a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <?php else: ?>
+            <tr>
+                <td colspan="5" class="nolist">No invoices found for this client.</td>
+            </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+<?php else: ?>
+<p>No client profile associated with this user.</p>
+<?php endif; ?>

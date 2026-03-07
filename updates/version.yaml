@@ -1,0 +1,115 @@
+0.0.0:
+    - "Rename plugin from Nexus CRM to Avalanche CRM – rename tables, role, settings, and transfer version history"
+
+0.0.1:
+    - "First version of Avalanche CRM"
+    - "Create Clients Table"
+    - v0.0.1/create_clients_table.php
+0.0.2:
+    - "Create Projects Table"
+    - v0.0.2/create_projects_table.php
+0.0.3:
+    - "Create Tickets Table"
+    - v0.0.3/create_tickets_table.php
+0.0.4:
+    - "Create Invoices Table"
+    - v0.0.4/create_invoices_table.php
+0.0.5:
+    - "Create Subscriptions Table"
+    - v0.0.5/create_subscriptions_table.php
+0.0.6:
+    - "Add user_id to Clients table"
+    - v0.0.6/add_user_id_to_clients.php
+0.0.7:
+    - "Seed Clients User Group"
+0.0.8:
+    - "Rename Clients User Group to Client"
+
+0.0.9:
+    - "Create Staff Assignments Tables"
+    - v0.0.9/create_staff_assignments_tables.php
+0.1.0:
+    - "Create Projects Clients Table"
+    - v0.1.0/create_projects_clients_table.php
+0.1.1:
+    - "Create Tasks Table"
+    - v0.1.1/create_tasks_table.php
+0.1.2:
+    - "Create Staff Table and Seed User Group"
+    - v0.1.2/create_staff_table.php
+0.1.3:
+    - "Add Department to Staff Table"
+    - v0.1.3/add_department_to_staff.php
+0.1.4:
+    - "Update Staff Pivot Keys"
+    - v0.1.4/update_staff_pivot_keys.php
+0.1.5:
+    - "Create Ticket Categories Table and Add category_id to Tickets"
+    - v0.1.5/create_ticket_categories_table.php
+0.1.6:
+    - "Add payment_method, amount, billing_cycle, next_billing_date, notes to Subscriptions Table"
+    - v0.1.6/add_fields_to_subscriptions_table.php
+0.1.7:
+    - "Create Subscription Plans Table and add plan_id to Subscriptions"
+    - v0.1.7/create_subscription_plans_table.php
+0.1.8:
+    - "Add paypal_plan_id to subscription_plans table"
+    - v0.1.8/add_paypal_plan_id_to_subscription_plans_table.php
+0.1.9:
+    - "Add Stripe fields to subscription plans, clients, and subscriptions"
+    - v0.1.9/add_stripe_fields.php
+0.2.0:
+    - "Add GoCardless fields to clients and subscriptions"
+    - v0.2.0/add_gocardless_fields.php
+0.2.1:
+    - "Add PayPal fields to subscriptions"
+    - v0.2.1/add_paypal_fields.php
+0.2.2:
+    - "Add billing fields to projects and tasks, invoice line items"
+    - v0.2.2/add_billing_fields.php
+0.2.3:
+    - "Add time tracking with start/stop timer to tasks"
+    - v0.2.3/add_time_tracking.php
+0.2.4:
+    - "Add payment fields to invoices for online payments"
+    - v0.2.4/add_invoice_payment_fields.php
+0.2.5:
+    - "Separate invoice statuses: internal workflow stage (draft/sent) and client-facing payment status (outstanding/due/overdue/cancelled/paid)"
+    - v0.2.5/add_internal_status_to_invoices.php
+0.2.6:
+    - "Create Ticket Statuses and Ticket Types tables"
+    - v0.2.6/create_ticket_statuses_and_types.php
+0.2.7:
+    - "Seed default ticket statuses"
+    - v0.2.6/seed_ticket_defaults.php
+0.2.8:
+    - "Create Transactions Table"
+    - v0.2.8/create_transactions_table.php
+0.2.9:
+    - "Create Campaigns Table"
+    - v0.2.9/create_campaigns_table.php
+0.2.10:
+    - "Create EmailTemplates Table"
+    - v0.2.10/create_email_templates_table.php
+0.3.0:
+    - "Add marketing opt-out and unsubscribe token to clients"
+    - v0.3.0/add_marketing_opt_out_to_clients.php
+0.3.1:
+    - "Create campaign recipients pivot table and add sent/failed counters to campaigns"
+    - v0.3.1/create_campaign_recipients_table.php
+0.3.2:
+    - "Add data tag support to campaigns and seed default email templates"
+    - v0.3.2/seed_default_email_template.php
+0.3.3:
+    - "Add category to email templates and seed notification templates"
+    - v0.3.3/add_category_to_email_templates.php
+    - v0.3.3/seed_notification_templates.php
+0.3.4:
+    - "Create ticket replies table for conversation threads"
+    - v0.3.4/create_ticket_replies_table.php
+0.3.5:
+    - "Create CRM Staff backend role and add backend_user_id to staff table"
+    - v0.3.5/create_crm_backend_role.php
+0.4.0:
+    - "Create Activity Logs table"
+    - v0.4.0/create_activity_logs_table.php

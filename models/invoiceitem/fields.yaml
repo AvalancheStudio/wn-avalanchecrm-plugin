@@ -1,0 +1,31 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    description:
+        label: Description
+        span: full
+        required: true
+    quantity:
+        label: Quantity / Hours
+        type: number
+        span: left
+        required: true
+    unit_price:
+        label: Unit Price / Rate
+        type: number
+        span: right
+        required: true
+    amount:
+        label: Amount
+        type: number
+        span: left
+        disabled: true
+        comment: Auto-calculated from quantity × unit price
+    task:
+        label: Linked Task
+        type: relation
+        span: right
+        nameFrom: title
+        emptyOption: — None —

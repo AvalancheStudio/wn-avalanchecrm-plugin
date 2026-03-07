@@ -1,0 +1,126 @@
+<section class="subscriptions-section subscriptions-section--plans">
+    <h2 class="subscriptions-section__title">Available Plans</h2>
+
+    {% if plans|length > 0 %}
+        <div class="subscriptions-plans-grid">
+            {% for plan in plans %}
+                {% set isSubscribed = false %}
+                {% for sub in subscriptions %}
+                    {% if sub.plan_id == plan.id and sub.status == 'active' %}
+                        {% set isSubscribed = true %}
+                    {% endif %}
+                {% endfor %}
+
+                <div class="plan-card {% if isSubscribed %}plan-card--current{% endif %}">
+                    {% if isSubscribed %}
+                        <div class="plan-card__ribbon">Current</div>
+                    {% endif %}
+
+                    <div class="plan-card__header">
+                        <h3 class="plan-card__name">{{ plan.name }}</h3>
+                        <div class="plan-card__price">
+                            <span class="plan-card__amount">{{ currencySymbol }}{{ plan.price|number_format(2) }}</span>
+                            <span class="plan-card__cycle">/ {{ plan.billing_cycle }}</span>
+                        </div>
+                    </div>
+
+                    <div class="plan-card__body">
+                        {% if plan.description %}
+                            <p class="plan-card__description">{{ plan.description }}</p>
+                        {% endif %}
+
+                        {% if plan.features %}
+                            <ul class="plan-card__features">
+                                {% for feature in plan.features %}
+                                    <li class="plan-card__feature">
+                                        <i class="icon-check"></i>
+                                        <span>{{ feature }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <div class="plan-card__footer">
+                        {% if isSubscribed %}
+                            <span class="subscriptions-btn subscriptions-btn--disabled">Subscribed</span>
+                        {% else %}
+                            <button
+                                type="button"
+                                class="subscriptions-btn subscriptions-btn--primary btn-subscribe"
+                                data-plan-id="{{ plan.id }}"
+                                data-plan-name="{{ plan.name }}"
+                                data-plan-price="{{ plan.price }}"
+                                data-plan-cycle="{{ plan.billing_cycle }}"
+                            >
+                                Subscribe
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="subscriptions-empty">
+            <p class="subscriptions-empty__text">No subscription plans are currently available.</p>
+        </div>
+    {% endif %}
+</section>
+
+{# Modal: Subscribe to Plan #}
+<div class="subscriptions-modal" id="modal-subscribe" style="display:none;">
+    <div class="subscriptions-modal__overlay"></div>
+    <div class="subscriptions-modal__dialog">
+        <div class="subscriptions-modal__header">
+            <h3>Subscribe to <span id="subscribe-plan-name"></span></h3>
+            <button type="button" class="subscriptions-modal__close">&times;</button>
+        </div>
+        <form data-request="{{ __SELF__ }}::onSubscribe" data-request-flash>
+            <div class="subscriptions-modal__body">
+                <input type="hidden" name="plan_id" id="subscribe-plan-id" value="">
+
+                <div class="subscriptions-plan-summary">
+                    <span id="subscribe-plan-price-display"></span>
+                </div>
+
+                <div class="subscriptions-form-group">
+                    <label>Select Payment Method</label>
+                    <div class="subscriptions-payment-options">
+                        {% if stripeEnabled %}
+                            <label class="subscriptions-payment-option">
+                                <input type="radio" name="payment_method" value="card">
+                                <span class="subscriptions-payment-option__label">
+                                    <i class="icon-credit-card"></i> Card (Stripe)
+                                    <small class="subscriptions-payment-option__hint">You'll be redirected to Stripe to enter your card details</small>
+                                </span>
+                            </label>
+                        {% endif %}
+                        {% if gocardlessEnabled %}
+                            <label class="subscriptions-payment-option">
+                                <input type="radio" name="payment_method" value="direct_debit">
+                                <span class="subscriptions-payment-option__label">
+                                    <i class="icon-bank"></i> Direct Debit (GoCardless)
+                                    <small class="subscriptions-payment-option__hint">You'll be redirected to GoCardless to set up your bank mandate</small>
+                                </span>
+                            </label>
+                        {% endif %}
+                        {% if paypalEnabled %}
+                            <label class="subscriptions-payment-option">
+                                <input type="radio" name="payment_method" value="paypal">
+                                <span class="subscriptions-payment-option__label">
+                                    <i class="icon-paypal"></i> PayPal
+                                    <small class="subscriptions-payment-option__hint">You'll be redirected to PayPal to approve your payment</small>
+                                </span>
+                            </label>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+            <div class="subscriptions-modal__footer">
+                <button type="button" class="subscriptions-btn subscriptions-btn--secondary subscriptions-modal__close-btn">Cancel</button>
+                <button type="submit" class="subscriptions-btn subscriptions-btn--primary">Confirm Subscription</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: 'avalanchestudio.avalanchecrm::lang.models.invoice.label'
+
+# Model Form Field configuration
+form: $/avalanchestudio/avalanchecrm/models/invoice/fields.yaml
+
+# Model Class name
+modelClass: AvalancheStudio\AvalancheCRM\Models\Invoice
+
+# Default redirect location
+defaultRedirect: avalanchestudio/avalanchecrm/invoices
+
+# Create page
+create:
+    title: backend::lang.form.create_title
+    redirect: avalanchestudio/avalanchecrm/invoices/update/:id
+    redirectClose: avalanchestudio/avalanchecrm/invoices
+
+# Update page
+update:
+    title: backend::lang.form.update_title
+    redirect: avalanchestudio/avalanchecrm/invoices
+    redirectClose: avalanchestudio/avalanchecrm/invoices
+
+# Preview page
+preview:
+    title: backend::lang.form.preview_title

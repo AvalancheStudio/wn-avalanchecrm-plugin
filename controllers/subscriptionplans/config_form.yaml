@@ -1,0 +1,24 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+name: "Subscription Plan"
+
+form: $/avalanchestudio/avalanchecrm/models/subscriptionplan/fields.yaml
+
+modelClass: AvalancheStudio\AvalancheCRM\Models\SubscriptionPlan
+
+defaultRedirect: avalanchestudio/avalanchecrm/subscriptionplans
+
+create:
+  title: "New Subscription Plan"
+  redirect: avalanchestudio/avalanchecrm/subscriptionplans/update/:id
+  redirectClose: avalanchestudio/avalanchecrm/subscriptionplans
+
+update:
+  title: "Edit Subscription Plan"
+  redirect: avalanchestudio/avalanchecrm/subscriptionplans
+  redirectClose: avalanchestudio/avalanchecrm/subscriptionplans
+
+preview:
+  title: "Preview Subscription Plan"

@@ -1,0 +1,87 @@
+<section class="subscriptions-section subscriptions-section--payment-methods">
+    <h2 class="subscriptions-section__title">Payment Methods</h2>
+
+    <p class="subscriptions-section__desc">
+        The following payment methods are available for your subscriptions.
+    </p>
+
+    <div class="payment-methods-grid">
+        {% if stripeEnabled %}
+            <div class="payment-method-card">
+                <div class="payment-method-card__icon">
+                    <i class="icon-credit-card"></i>
+                </div>
+                <div class="payment-method-card__info">
+                    <h4>Credit / Debit Card</h4>
+                    <p>Pay securely with your Visa, Mastercard, or other debit/credit card via Stripe. You will be redirected to Stripe's secure checkout to enter your card details.</p>
+                </div>
+                <div class="payment-method-card__status payment-method-card__status--available">
+                    Available
+                </div>
+            </div>
+        {% endif %}
+
+        {% if gocardlessEnabled %}
+            <div class="payment-method-card">
+                <div class="payment-method-card__icon">
+                    <i class="icon-bank"></i>
+                </div>
+                <div class="payment-method-card__info">
+                    <h4>Direct Debit</h4>
+                    <p>Set up recurring bank payments via GoCardless. You will be redirected to GoCardless to authorise a Direct Debit mandate from your bank account.</p>
+                </div>
+                <div class="payment-method-card__status payment-method-card__status--available">
+                    Available
+                </div>
+            </div>
+        {% endif %}
+
+        {% if paypalEnabled %}
+            <div class="payment-method-card">
+                <div class="payment-method-card__icon">
+                    <i class="icon-paypal"></i>
+                </div>
+                <div class="payment-method-card__info">
+                    <h4>PayPal</h4>
+                    <p>Pay using your PayPal account. You will be redirected to PayPal to approve recurring payments for your subscription.</p>
+                </div>
+                <div class="payment-method-card__status payment-method-card__status--available">
+                    Available
+                </div>
+            </div>
+        {% endif %}
+
+        {% if not stripeEnabled and not gocardlessEnabled and not paypalEnabled %}
+            <div class="subscriptions-empty">
+                <p class="subscriptions-empty__text">No payment methods are currently configured. Please contact support.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    {# Stripe Customer Portal button for managing saved cards and billing #}
+    {% if stripeEnabled and client.stripe_customer_id %}
+        <div class="subscriptions-portal-section">
+            <button type="button" class="subscriptions-btn subscriptions-btn--outline btn-stripe-portal">
+                <i class="icon-credit-card"></i> Manage Cards &amp; Billing on Stripe
+            </button>
+        </div>
+    {% endif %}
+
+    {# GoCardless mandate status #}
+    {% if gocardlessEnabled and client.gocardless_mandate_id %}
+        <div class="subscriptions-portal-section">
+            <div class="payment-method-card payment-method-card--compact">
+                <div class="payment-method-card__icon">
+                    <i class="icon-bank"></i>
+                </div>
+                <div class="payment-method-card__info">
+                    <h4>Direct Debit Mandate Active</h4>
+                    <p>Your bank mandate is set up and active. Payments will be collected automatically on your billing dates.</p>
+                </div>
+                <div class="payment-method-card__status payment-method-card__status--active">
+                    <i class="icon-check"></i> Active
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</section>

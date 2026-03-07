@@ -1,0 +1,10 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+items:
+    label: Line Items
+    list: $/avalanchestudio/avalanchecrm/models/invoiceitem/columns.yaml
+    form: $/avalanchestudio/avalanchecrm/models/invoiceitem/fields.yaml
+    view:
+        toolbarButtons: create|delete

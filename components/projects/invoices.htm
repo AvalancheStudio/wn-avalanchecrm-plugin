@@ -1,0 +1,48 @@
+{# Invoices Tab #}
+<div class="projects-section">
+    <h3 class="projects-section-title">
+        <i class="icon-file-text-o"></i> Invoices
+        <span class="projects-section-count">{{ activeProject.invoices|length }}</span>
+    </h3>
+
+    {% if activeProject.invoices is not empty %}
+        <div class="projects-table-responsive">
+            <table class="projects-table">
+                <thead>
+                    <tr>
+                        <th>Invoice #</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Due Date</th>
+                        <th>Issued</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for invoice in activeProject.invoices %}
+                        <tr>
+                            <td>
+                                <strong>{{ invoice.invoice_number|default('#' ~ invoice.id) }}</strong>
+                            </td>
+                            <td>{{ invoice.amount|currency }}</td>
+                            <td>
+                                <span class="projects-badge projects-badge--{{ invoice.status|default('outstanding') }}">
+                                    {{ invoice.status|default('outstanding')|replace({'_': ' '})|title }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if invoice.due_date %}
+                                    {{ invoice.due_date|date('M d, Y') }}
+                                {% else %}
+                                    <span class="projects-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ invoice.created_at|date('M d, Y') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="projects-empty-section">No invoices have been issued for this project.</p>
+    {% endif %}
+</div>

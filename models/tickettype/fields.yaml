@@ -1,0 +1,49 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+  name:
+    label: Name
+    span: left
+    required: true
+  icon:
+    label: Icon
+    type: iconpicker
+    span: right
+
+  custom_fields:
+    label: Custom Fields
+    type: repeater
+    span: full
+    prompt: Add new custom field
+    form:
+      fields:
+        name:
+          label: Field Name (Slug)
+          span: left
+          required: true
+          comment: Use lowercase and underscores, e.g. 'serial_number'
+        label:
+          label: Label
+          span: right
+          required: true
+        type:
+          label: Type
+          type: dropdown
+          span: left
+          options:
+            text: Text
+            textarea: Textarea
+            dropdown: Dropdown
+            switch: Switch
+            datepicker: Date
+        options:
+          label: Options (for Dropdown)
+          type: textarea
+          span: right
+          comment: Enter options one per line (key:Value or just Value)
+          trigger:
+            action: show
+            field: type
+            condition: value[dropdown]

@@ -1,0 +1,11 @@
+name: Ticket Categories
+form: $/avalanchestudio/avalanchecrm/models/ticketcategory/fields.yaml
+modelClass: AvalancheStudio\AvalancheCRM\Models\TicketCategory
+defaultRedirect: avalanchestudio/avalanchecrm/ticketcategories
+create:
+  redirect: avalanchestudio/avalanchecrm/ticketcategories/update/:id
+  redirectClose: avalanchestudio/avalanchecrm/ticketcategories
+update:
+  redirect: avalanchestudio/avalanchecrm/ticketcategories
+  redirectClose: avalanchestudio/avalanchecrm/ticketcategories
+confirmDelete: "Do you really want to delete this category?"

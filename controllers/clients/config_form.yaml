@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: 'avalanchestudio.avalanchecrm::lang.models.client.label'
+
+# Model Form Field configuration
+form: $/avalanchestudio/avalanchecrm/models/client/fields.yaml
+
+# Model Class name
+modelClass: AvalancheStudio\AvalancheCRM\Models\Client
+
+# Default redirect location
+defaultRedirect: avalanchestudio/avalanchecrm/clients
+
+# Create page
+create:
+    title: backend::lang.form.create_title
+    redirect: avalanchestudio/avalanchecrm/clients/update/:id
+    redirectClose: avalanchestudio/avalanchecrm/clients
+
+# Update page
+update:
+    title: backend::lang.form.update_title
+    redirect: avalanchestudio/avalanchecrm/clients
+    redirectClose: avalanchestudio/avalanchecrm/clients
+
+# Preview page
+preview:
+    title: backend::lang.form.preview_title

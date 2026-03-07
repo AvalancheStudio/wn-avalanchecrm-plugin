@@ -1,0 +1,35 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    name:
+        label: Template Name
+        span: left
+        type: text
+        required: true
+    is_active:
+        label: Active
+        span: right
+        type: switch
+        default: true
+    category:
+        label: Category
+        span: left
+        type: dropdown
+        required: true
+        default: marketing
+    subject:
+        label: Default Subject
+        span: right
+        type: text
+    _tag_reference:
+        label: Data Tags
+        type: partial
+        path: $/avalanchestudio/avalanchecrm/controllers/campaigns/_tag_reference.php
+        span: full
+    content:
+        label: Content
+        type: richeditor
+        size: huge
+        span: full

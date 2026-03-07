@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Ticket Type
+
+# Model Form Configuration
+form: $/avalanchestudio/avalanchecrm/models/tickettype/fields.yaml
+
+# Model Class name
+modelClass: AvalancheStudio\AvalancheCRM\Models\TicketType
+
+# Default redirect location
+defaultRedirect: avalanchestudio/avalanchecrm/tickettypes
+
+# Create page
+create:
+  title: Create Ticket Type
+  redirect: avalanchestudio/avalanchecrm/tickettypes/update/:id
+  redirectClose: avalanchestudio/avalanchecrm/tickettypes
+
+# Update page
+update:
+  title: Edit Ticket Type
+  redirect: avalanchestudio/avalanchecrm/tickettypes
+  redirectClose: avalanchestudio/avalanchecrm/tickettypes
+
+# Preview page
+preview:
+  title: Preview Ticket Type

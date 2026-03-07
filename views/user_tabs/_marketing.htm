@@ -1,0 +1,22 @@
+<?php
+    $client = $formModel->client ?? null;
+    $optedOut = $client ? (bool) $client->marketing_opt_out : false;
+?>
+<?php if ($client): ?>
+<div class="form-group switch-field span-left">
+    <div class="field-switch" data-control="switch">
+        <label>Marketing Opt-Out</label>
+        <p class="help-block">When enabled, this client will not receive any marketing campaign emails.</p>
+        <input type="hidden" name="client_marketing[marketing_opt_out]" value="0">
+        <label class="storm-switch">
+            <input type="checkbox"
+                   name="client_marketing[marketing_opt_out]"
+                   value="1"
+                   <?= $optedOut ? 'checked' : '' ?>>
+            <span class="storm-slider"></span>
+        </label>
+    </div>
+</div>
+<?php else: ?>
+<p class="text-muted">Marketing preferences will be available once the client profile is created.</p>
+<?php endif; ?>

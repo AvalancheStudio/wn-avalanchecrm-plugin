@@ -1,0 +1,46 @@
+{{ themeStyles|raw }}
+
+<div class="account-details-wrapper" id="account-details-wrapper">
+
+    {% if not user %}
+        <div class="account-details-alert account-details-alert--warning">
+            <p>Please <a href="{{ 'account'|page }}">sign in</a> to manage your account.</p>
+        </div>
+    {% else %}
+
+        {# Flash Messages #}
+        <div id="account-flash-messages">
+            {% flash %}
+                <div class="account-details-alert account-details-alert--{{ type }}">
+                    {{ message }}
+                </div>
+            {% endflash %}
+        </div>
+
+        <div class="account-details-container">
+            <div class="account-details-header">
+                <h2>Account Details</h2>
+                <p>Update your personal information, address, and contact details.</p>
+            </div>
+
+            <form data-request="onUpdate" 
+                  data-request-flash 
+                  data-request-validate
+                  data-request-update="'@form_fields': '#account-details-form'"
+                  id="account-details-form-main">
+                
+                <div id="account-details-form">
+                    {% partial __SELF__ ~ '::form_fields' %}
+                </div>
+
+                <div class="account-details-footer">
+                    <button type="submit" class="account-details-btn account-details-btn--primary">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    {% endif %}
+
+</div>

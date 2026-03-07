@@ -1,0 +1,25 @@
+# ===================================
+#  List Behavior Config
+# ===================================
+
+list: $/avalanchestudio/avalanchecrm/models/subscriptionplan/columns.yaml
+
+modelClass: AvalancheStudio\AvalancheCRM\Models\SubscriptionPlan
+
+title: "Subscription Plans"
+
+recordUrl: avalanchestudio/avalanchecrm/subscriptionplans/update/:id
+
+noRecordsMessage: backend::lang.list.no_records
+
+recordsPerPage: 20
+
+showPageNumbers: true
+showSetup: true
+showSorting: true
+showCheckboxes: true
+
+toolbar:
+  buttons: list_toolbar
+  search:
+    prompt: backend::lang.list.search_prompt

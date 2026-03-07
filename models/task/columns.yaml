@@ -1,0 +1,41 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+  id:
+    label: ID
+    searchable: true
+  title:
+    label: Title
+    searchable: true
+  project:
+    label: Project
+    relation: project
+    select: name
+    searchable: true
+  assigned_to:
+    label: Assigned To
+    relation: assigned_to
+    select: login
+    searchable: true
+  status:
+    label: Status
+    searchable: true
+  priority:
+    label: Priority
+    searchable: true
+  due_date:
+    label: Due Date
+    type: date
+  is_billable:
+    label: Billable
+    type: switch
+  hours:
+    label: Hours
+    type: number
+    invisible: true
+  is_invoiced:
+    label: Invoiced
+    type: switch
+    invisible: true

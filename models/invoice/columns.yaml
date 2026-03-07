@@ -1,0 +1,34 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    invoice_number:
+        label: Invoice Number
+        searchable: true
+    client:
+        label: Client
+        relation: client
+        select: name
+        searchable: true
+    project:
+        label: Project
+        relation: project
+        select: name
+        searchable: true
+    amount:
+        label: Amount
+        type: number
+    internal_status:
+        label: Stage
+        searchable: true
+    status:
+        label: Payment Status
+        searchable: true
+    issue_date:
+        label: Issue Date
+        type: date
+    due_date:
+        label: Due Date
+        type: date
+        invisible: true

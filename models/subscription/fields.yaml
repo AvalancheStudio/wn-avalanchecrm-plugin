@@ -1,0 +1,108 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    client:
+        label: Client
+        type: relation
+        span: full
+        nameFrom: name
+        required: true
+
+    plan:
+        label: Subscription Plan
+        type: relation
+        span: full
+        nameFrom: name
+        emptyOption: "â€” No plan selected â€”"
+        comment: "Optionally link to a subscription plan. Price and billing cycle will be inherited if set."
+
+    payment_method:
+        label: Payment Method
+        type: dropdown
+        span: left
+        options:
+            card: Card (Stripe)
+            direct_debit: Direct Debit
+            paypal: PayPal
+        placeholder: Select payment method...
+
+    status:
+        label: Status
+        type: dropdown
+        span: right
+        options:
+            active: avalanchestudio.avalanchecrm::lang.statuses.active
+            pending: avalanchestudio.avalanchecrm::lang.statuses.pending
+            past_due: avalanchestudio.avalanchecrm::lang.statuses.past_due
+            canceled: avalanchestudio.avalanchecrm::lang.statuses.canceled
+        default: active
+
+    plan_name:
+        label: Plan Name
+        span: left
+
+    billing_cycle:
+        label: Billing Cycle
+        type: dropdown
+        span: right
+        options:
+            monthly: Monthly
+            quarterly: Quarterly
+            annual: Annual
+        placeholder: Select billing cycle...
+
+    amount:
+        label: Amount
+        type: number
+        span: left
+        step: 0.01
+        min: 0
+
+    next_billing_date:
+        label: Next Billing Date
+        type: datepicker
+        mode: date
+        span: right
+
+    reference_id:
+        label: Reference / Subscription ID
+        span: full
+        comment: "External subscription ID from the payment provider (e.g. Stripe sub_xxx)."
+
+    stripe_subscription_id:
+        label: Stripe Subscription ID
+        span: left
+        comment: "The Stripe subscription ID (sub_xxx). Populated automatically."
+        disabled: true
+
+    stripe_checkout_session_id:
+        label: Stripe Checkout Session ID
+        span: right
+        comment: "The Stripe Checkout Session ID. Populated automatically."
+        disabled: true
+
+    gocardless_subscription_id:
+        label: GoCardless Subscription ID
+        span: left
+        comment: "The GoCardless subscription ID (SBxxxxxxxx). Populated automatically."
+        disabled: true
+
+    gocardless_redirect_flow_id:
+        label: GoCardless Redirect Flow ID
+        span: right
+        comment: "The GoCardless Redirect Flow ID. Populated automatically."
+        disabled: true
+
+    paypal_subscription_id:
+        label: PayPal Subscription ID
+        span: left
+        comment: "The PayPal subscription ID (I-xxxxxxxx). Populated automatically."
+        disabled: true
+
+    notes:
+        label: Notes
+        type: textarea
+        span: full
+        size: small

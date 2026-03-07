@@ -1,0 +1,52 @@
+<?= Form::ajax('onSaveSettings', [
+    'id' => 'email-settings-form',
+    'class' => 'layout',
+    'success' => "$('[data-dismiss=\"popup\"]').click();"
+]) ?>
+<input type="hidden" name="category" value="<?= e($category) ?>">
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="popup">&times;</button>
+    <h4 class="modal-title">Edit Settings:
+        <?= e($label) ?>
+    </h4>
+</div>
+
+<div class="modal-body">
+    <p>Update the default email sending variables for the <strong>
+            <?= e($label) ?>
+        </strong> category below.</p>
+
+    <div class="form-group row">
+        <div class="col-md-6">
+            <label>From Address</label>
+            <input type="email" name="email_<?= e($category) ?>_from_address" class="form-control"
+                value="<?= e($settings->{"email_{$category}_from_address"}) ?>">
+        </div>
+        <div class="col-md-6">
+            <label>From Name</label>
+            <input type="text" name="email_<?= e($category) ?>_from_name" class="form-control"
+                value="<?= e($settings->{"email_{$category}_from_name"}) ?>">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-6">
+            <label>CC</label>
+            <input type="text" name="email_<?= e($category) ?>_cc" class="form-control" value="<?= e($settings->{"email_{$category}_cc"}) ?>">
+            <p class="help-block">Comma separated email addresses</p>
+        </div>
+        <div class="col-md-6">
+            <label>BCC</label>
+            <input type="text" name="email_<?= e($category) ?>_bcc" class="form-control" value="<?= e($settings->{"email_{$category}_bcc"}) ?>">
+            <p class="help-block">Comma separated email addresses</p>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button type="button" class="btn btn-default" data-dismiss="popup">Cancel</button>
+</div>
+
+<?= Form::close() ?>

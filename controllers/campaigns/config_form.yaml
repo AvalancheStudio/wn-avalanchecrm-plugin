@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: 'avalanchestudio.avalanchecrm::lang.models.campaign.label'
+
+# Model Form Field configuration
+form: $/avalanchestudio/avalanchecrm/models/campaign/fields.yaml
+
+# Model Class name
+modelClass: AvalancheStudio\AvalancheCRM\Models\Campaign
+
+# Default redirect location
+defaultRedirect: avalanchestudio/avalanchecrm/campaigns
+
+# Create page
+create:
+    title: backend::lang.form.create_title
+    redirect: avalanchestudio/avalanchecrm/campaigns/update/:id
+    redirectClose: avalanchestudio/avalanchecrm/campaigns
+
+# Update page
+update:
+    title: backend::lang.form.update_title
+    redirect: avalanchestudio/avalanchecrm/campaigns/update/:id
+    redirectClose: avalanchestudio/avalanchecrm/campaigns
+
+# Preview page
+preview:
+    title: backend::lang.form.preview_title

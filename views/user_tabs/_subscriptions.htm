@@ -1,0 +1,59 @@
+<?php 
+use Backend\Facades\Backend;
+use AvalancheStudio\AvalancheCRM\Models\Settings;
+
+$client = $formModel->client;
+$settings = Settings::instance();
+$symbol = $settings->currency_symbol ?: '$';
+?>
+<?php if ($client): ?>
+<?php $subscriptions = $client->subscriptions()->orderBy('created_at', 'desc')->get(); ?>
+<div class="control-list mt-3">
+    <table class="table data">
+        <thead>
+            <tr>
+                <th><span>Plan</span></th>
+                <th><span>Amount</span></th>
+                <th><span>Cycle</span></th>
+                <th><span>Status</span></th>
+                <th style="width: 50px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($subscriptions->count() > 0): ?>
+            <?php foreach ($subscriptions as $subscription): ?>
+            <tr>
+                <td>
+                    <?= e($subscription->plan_name ?: ($subscription->plan ? $subscription->plan->name : '')) ?>
+                </td>
+                <td>
+                    <?= e($symbol) ?>
+                    <?= number_format($subscription->amount, 2) ?>
+                </td>
+                <td>
+                    <?= e(ucfirst($subscription->billing_cycle)) ?>
+                </td>
+                <td>
+                    <span class="badge badge-<?= $subscription->status == 'active' ? 'success' : 'secondary' ?>">
+                        <?= e(ucfirst($subscription->status)) ?>
+                    </span>
+                </td>
+                <td>
+                    <a href="<?= Backend::url('avalanchestudio/avalanchecrm/subscriptions/update/' . $subscription->id) ?>"
+                        class="btn btn-xs btn-secondary">
+                        <i class="icon-pencil"></i>
+                    </a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <?php else: ?>
+            <tr>
+                <td colspan="5" class="nolist">No subscriptions found for this client.</td>
+            </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+<?php else: ?>
+<p>No client profile associated with this user.</p>
+<?php endif; ?>

@@ -1,0 +1,195 @@
+/* ==========================================================================
+   Account Details Component Styles
+   ========================================================================== */
+
+.account-details-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1rem;
+    font-family: inherit;
+}
+
+/* Alerts
+   ========================================================================== */
+
+.account-details-alert {
+    padding: 0.85rem 1.15rem;
+    border-radius: 8px;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.account-details-alert--warning {
+    background-color: var(--crm-warning-light, #fffbeb);
+    border: 1px solid var(--crm-warning-border, #fde68a);
+    color: var(--crm-warning-text, #92400e);
+}
+
+.account-details-alert--success {
+    background-color: var(--crm-success-light, #ecfdf5);
+    border: 1px solid var(--crm-success-border, #a7f3d0);
+    color: var(--crm-success-text, #065f46);
+}
+
+.account-details-alert--error {
+    background-color: var(--crm-danger-light, #fef2f2);
+    border: 1px solid var(--crm-danger-border, #fecaca);
+    color: var(--crm-danger-text, #991b1b);
+}
+
+/* Container & Header
+   ========================================================================== */
+
+.account-details-container {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.account-details-header {
+    padding: 1.5rem 1.75rem;
+    border-bottom: 1px solid #f3f4f6;
+    background-color: #fafafa;
+}
+
+.account-details-header h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    color: #111827;
+}
+
+.account-details-header p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* Form Grid
+   ========================================================================== */
+
+.account-details-grid {
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.account-details-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.account-details-section h3 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.5rem 0;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 0.5rem;
+}
+
+.account-details-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+}
+
+.account-details-section--full .account-details-row {
+     grid-template-columns: 1fr;
+}
+
+/* Inputs
+   ========================================================================== */
+
+.account-details-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.account-details-field label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.account-details-input {
+    padding: 0.6rem 0.85rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: #fff;
+    color: #111827;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.account-details-input:focus {
+    outline: none;
+    border-color: var(--crm-primary, #4a6cf7);
+    box-shadow: 0 0 0 3px var(--crm-primary-ring, rgba(74, 108, 247, 0.12));
+}
+
+.account-details-error {
+    font-size: 0.75rem;
+    color: var(--crm-danger, #ef4444);
+    margin-top: 0.15rem;
+}
+
+/* Footer
+   ========================================================================== */
+
+.account-details-footer {
+    padding: 1.25rem 1.75rem;
+    background-color: #fafafa;
+    border-top: 1px solid #f3f4f6;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.account-details-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.75rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-decoration: none;
+    line-height: 1.4;
+}
+
+.account-details-btn--primary {
+    background-color: var(--crm-primary, #4a6cf7);
+    color: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.account-details-btn--primary:hover {
+    background-color: var(--crm-primary-hover, #3b5de7);
+    transform: translateY(-1px);
+}
+
+.account-details-btn--primary:active {
+    transform: translateY(0);
+}
+
+/* Responsive
+   ========================================================================== */
+
+@media (max-width: 640px) {
+    .account-details-row {
+        grid-template-columns: 1fr;
+    }
+}

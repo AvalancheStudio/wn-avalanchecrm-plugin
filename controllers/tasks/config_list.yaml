@@ -1,0 +1,33 @@
+# ===================================
+#  List Behavior Config
+# ===================================
+
+# Model List Column configuration
+list: $/avalanchestudio/avalanchecrm/models/task/columns.yaml
+
+# Model Class name
+modelClass: AvalancheStudio\AvalancheCRM\Models\Task
+
+# List Title
+title: Tasks
+
+# Link URL for each record
+recordUrl: avalanchestudio/avalanchecrm/tasks/update/:id
+
+# Message to display if the list is empty
+noRecordsMessage: No tasks found.
+
+# Records to display per page
+recordsPerPage: 20
+
+# Display checkboxes next to each record
+showCheckboxes: true
+
+# Toolbar widget configuration
+toolbar:
+  # Partial for toolbar buttons
+  buttons: list_toolbar
+
+  # Search widget configuration
+  search:
+    prompt: Search Tasks

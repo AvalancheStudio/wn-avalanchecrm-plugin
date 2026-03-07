@@ -1,0 +1,11 @@
+columns:
+  name:
+    label: Name
+    searchable: true
+    sortable: true
+  color:
+    label: Color
+    type: text
+  created_at:
+    label: Created
+    type: datetime

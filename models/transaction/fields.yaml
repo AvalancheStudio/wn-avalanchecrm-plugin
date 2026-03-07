@@ -1,0 +1,8 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    id:
+        label: 'avalanchestudio.avalanchecrm::lang.models.general.id'
+        disabled: true

@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: 'avalanchestudio.avalanchecrm::lang.models.project.label'
+
+# Model Form Field configuration
+form: $/avalanchestudio/avalanchecrm/models/project/fields.yaml
+
+# Model Class name
+modelClass: AvalancheStudio\AvalancheCRM\Models\Project
+
+# Default redirect location
+defaultRedirect: avalanchestudio/avalanchecrm/projects
+
+# Create page
+create:
+    title: backend::lang.form.create_title
+    redirect: avalanchestudio/avalanchecrm/projects/update/:id
+    redirectClose: avalanchestudio/avalanchecrm/projects
+
+# Update page
+update:
+    title: backend::lang.form.update_title
+    redirect: avalanchestudio/avalanchecrm/projects
+    redirectClose: avalanchestudio/avalanchecrm/projects
+
+# Preview page
+preview:
+    title: backend::lang.form.preview_title

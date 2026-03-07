@@ -1,0 +1,11 @@
+title: Ticket Categories
+list: $/avalanchestudio/avalanchecrm/models/ticketcategory/columns.yaml
+modelClass: AvalancheStudio\AvalancheCRM\Models\TicketCategory
+recordUrl: avalanchestudio/avalanchecrm/ticketcategories/update/:id
+noRecordsMessage: "No categories found"
+recordsPerPage: 20
+showCheckboxes: true
+toolbar:
+  buttons: list_toolbar
+  search:
+    prompt: "Search categories..."

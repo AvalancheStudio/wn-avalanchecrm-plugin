@@ -1,0 +1,19 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    name:
+        label: Name
+        searchable: true
+    category_label:
+        label: Category
+        searchable: false
+        sortable: true
+        valueFrom: category_label
+    subject:
+        label: Subject
+        searchable: true
+    is_active:
+        label: Active
+        type: switch

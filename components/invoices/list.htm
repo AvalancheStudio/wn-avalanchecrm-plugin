@@ -1,0 +1,107 @@
+{# Invoice List with Filter #}
+<div class="invoices-toolbar">
+    <h2 class="invoices-heading">My Invoices</h2>
+    <div class="invoices-toolbar-right">
+        <select id="invoice-status-filter" class="invoices-select"
+            data-request="{{ __SELF__ }}::onFilterInvoices"
+            data-request-data="status: this.value"
+            data-request-update="'{{ __SELF__ }}::list': '#invoices-list'">
+            <option value="all">All Statuses</option>
+            <option value="outstanding">Outstanding</option>
+            <option value="due">Due</option>
+            <option value="overdue">Overdue</option>
+            <option value="paid">Paid</option>
+            <option value="cancelled">Cancelled</option>
+        </select>
+    </div>
+</div>
+
+{% if invoices is not empty %}
+    <div class="invoices-table-responsive">
+        <table class="invoices-table">
+            <thead>
+                <tr>
+                    <th>Invoice #</th>
+                    {% if showProject %}
+                        <th>Project</th>
+                    {% endif %}
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Issue Date</th>
+                    <th>Due Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for invoice in invoices %}
+                    <tr class="invoices-row">
+                        <td>
+                            <strong>{{ invoice.invoice_number|default('#' ~ invoice.id) }}</strong>
+                        </td>
+                        {% if showProject %}
+                            <td>
+                                {% if invoice.project %}
+                                    <span class="invoices-project-name">
+                                        <i class="icon-briefcase"></i> {{ invoice.project.name }}
+                                    </span>
+                                {% else %}
+                                    <span class="invoices-muted">—</span>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                        <td class="invoices-amount">{{ invoice.amount|currency }}</td>
+                        <td>
+                            <span class="invoices-badge invoices-badge--{{ invoice.status|default('outstanding') }}">
+                                {{ invoice.status|default('outstanding')|replace({'_': ' '})|title }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if invoice.issue_date %}
+                                {{ invoice.issue_date|date('M d, Y') }}
+                            {% else %}
+                                <span class="invoices-muted">—</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if invoice.due_date %}
+                                {{ invoice.due_date|date('M d, Y') }}
+                            {% else %}
+                                <span class="invoices-muted">—</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <button type="button" class="invoices-btn invoices-btn--outline invoices-btn--sm"
+                                data-request="{{ __SELF__ }}::onViewInvoice"
+                                data-request-data="invoice_id: {{ invoice.id }}">
+                                <i class="icon-eye"></i> View
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {# Pagination #}
+    {% if invoices.lastPage > 1 %}
+        <div class="invoices-pagination">
+            {% if invoices.currentPage > 1 %}
+                <a href="{{ this.page.baseFileName|page }}?page={{ invoices.currentPage - 1 }}" class="invoices-btn invoices-btn--outline">&laquo; Previous</a>
+            {% endif %}
+
+            <span class="invoices-pagination-info">
+                Page {{ invoices.currentPage }} of {{ invoices.lastPage }}
+            </span>
+
+            {% if invoices.currentPage < invoices.lastPage %}
+                <a href="{{ this.page.baseFileName|page }}?page={{ invoices.currentPage + 1 }}" class="invoices-btn invoices-btn--outline">Next &raquo;</a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+{% else %}
+    <div class="invoices-empty">
+        <i class="icon-file-text-o invoices-empty-icon"></i>
+        <p>No invoices found.</p>
+    </div>
+{% endif %}

@@ -1,0 +1,359 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+tabs:
+    fields:
+        # ─── GENERAL TAB ─────────────────────────────────────────────
+        general_branding_section:
+            label: Branding & Identity
+            type: section
+            tab: General
+
+        company_name:
+            label: avalanchestudio.avalanchecrm::lang.models.settings.company_name
+            tab: General
+            type: text
+            span: left
+            comment: avalanchestudio.avalanchecrm::lang.models.settings.company_name_comment
+
+        company_logo:
+            label: avalanchestudio.avalanchecrm::lang.models.settings.company_logo
+            tab: General
+            type: fileupload
+            mode: image
+            imageHeight: 100
+            imageWidth: 100
+            span: right
+            comment: avalanchestudio.avalanchecrm::lang.models.settings.company_logo_comment
+
+        company_address:
+            label: avalanchestudio.avalanchecrm::lang.models.settings.company_address
+            tab: General
+            type: textarea
+            size: small
+            span: full
+            comment: avalanchestudio.avalanchecrm::lang.models.settings.company_address_comment
+
+        company_email:
+            label: avalanchestudio.avalanchecrm::lang.models.settings.company_email
+            tab: General
+            type: text
+            span: left
+            comment: avalanchestudio.avalanchecrm::lang.models.settings.company_email_comment
+
+        company_phone:
+            label: avalanchestudio.avalanchecrm::lang.models.settings.company_phone
+            tab: General
+            type: text
+            span: right
+            comment: avalanchestudio.avalanchecrm::lang.models.settings.company_phone_comment
+
+        theme_colors_section:
+            label: Theme appearance
+            type: section
+            tab: General
+
+        theme_color_primary:
+            label: Primary
+            tab: General
+            type: colorpicker
+            default: "#4a6cf7"
+            span: auto
+            comment: "Buttons, links, focus rings, active states."
+
+        theme_color_success:
+            label: Success
+            tab: General
+            type: colorpicker
+            default: "#28a745"
+            span: auto
+            comment: "Paid / completed / active badges and alerts."
+
+        theme_color_warning:
+            label: Warning
+            tab: General
+            type: colorpicker
+            default: "#d97706"
+            span: auto
+            comment: "Pending / medium-priority badges and alerts."
+
+        theme_color_danger:
+            label: Danger
+            tab: General
+            type: colorpicker
+            default: "#dc2626"
+            span: auto
+            comment: "Error alerts, cancelled badges, high-priority items."
+
+        theme_color_info:
+            label: Info
+            tab: General
+            type: colorpicker
+            default: "#2563eb"
+            span: auto
+            comment: "Informational alerts, open / sent badges."
+
+        # ─── FEATURES TAB ────────────────────────────────────────────
+        features_section:
+            label: CRM Features & Modules
+            type: section
+            tab: Features
+
+        enable_projects:
+            label: Enable Projects
+            tab: Features
+            type: switch
+            default: true
+            span: left
+
+        enable_tickets:
+            label: Enable Tickets
+            tab: Features
+            type: switch
+            default: true
+            span: right
+
+        enable_marketing:
+            label: Enable Marketing
+            tab: Features
+            type: switch
+            default: true
+            span: left
+
+        enable_subscriptions:
+            label: Enable Subscriptions
+            tab: Features
+            type: switch
+            default: true
+            span: right
+
+        enable_invoices:
+            label: Enable Invoices
+            tab: Features
+            type: switch
+            default: true
+            span: left
+
+        # ─── INVOICING TAB ──────────────────────────────────────────
+        invoicing_details_section:
+            label: Currency & Region
+            type: section
+            tab: Invoicing
+
+        currency_code:
+            label: Currency Code
+            tab: Invoicing
+            type: text
+            default: "USD"
+            span: left
+            comment: e.g. USD, EUR, GBP
+
+        currency_symbol:
+            label: Currency Symbol
+            tab: Invoicing
+            type: text
+            default: "$"
+            span: right
+            comment: e.g. $, €, £
+
+        invoice_config_section:
+            label: Invoice Configuration
+            type: section
+            tab: Invoicing
+
+        invoice_prefix:
+            label: Invoice Prefix
+            tab: Invoicing
+            type: text
+            default: "INV"
+            span: left
+            comment: "Prefix for invoice numbers (e.g. INV, BILL, or your company initials)."
+
+        invoice_number_format:
+            label: Number Format
+            tab: Invoicing
+            type: dropdown
+            default: "prefix-date-seq"
+            span: right
+            comment: "Choose how invoice numbers are structured."
+            options:
+                prefix-date-seq: "{PREFIX}-YYYYMMDD-0001 (prefix + date + sequence)"
+                prefix-seq: "{PREFIX}-0001 (prefix + sequence)"
+                date-seq: "YYYYMMDD-0001 (date + sequence)"
+                seq-only: "0001 (sequence only)"
+
+        invoice_number_padding:
+            label: Sequence Padding
+            tab: Invoicing
+            type: dropdown
+            default: "4"
+            span: left
+            comment: "Minimum digits for the sequence number (e.g. 4 = 0001)."
+            options:
+                2: "2 digits (01)"
+                3: "3 digits (001)"
+                4: "4 digits (0001)"
+                5: "5 digits (00001)"
+                6: "6 digits (000001)"
+
+        invoice_next_number:
+            label: Next Invoice Number
+            tab: Invoicing
+            type: number
+            default: 1
+            span: right
+            comment: "The next sequential number to use. Automatically increments after each invoice."
+
+        # ─── PAYMENTS TAB ────────────────────────────────────────────
+        payment_stripe_section:
+            label: Stripe (Card Payments)
+            type: section
+            tab: Payments
+
+        stripe_enabled:
+            label: Enable Card Payments (Stripe)
+            tab: Payments
+            type: switch
+            span: full
+            comment: Accept credit and debit card payments via Stripe.
+
+        stripe_public_key:
+            label: Publishable Key
+            tab: Payments
+            type: text
+            span: left
+            comment: Found in your Stripe dashboard under Developers → API Keys.
+            trigger:
+                action: show
+                field: stripe_enabled
+                condition: checked
+
+        stripe_secret_key:
+            label: Secret Key
+            tab: Payments
+            type: text
+            span: right
+            comment: Keep this private — never expose it on the frontend.
+            trigger:
+                action: show
+                field: stripe_enabled
+                condition: checked
+
+        stripe_webhook_secret:
+            label: Webhook Signing Secret
+            tab: Payments
+            type: text
+            span: full
+            comment: Found in Stripe dashboard under Developers → Webhooks. Used to verify incoming webhook events.
+            trigger:
+                action: show
+                field: stripe_enabled
+                condition: checked
+
+        payment_gocardless_section:
+            label: GoCardless (Direct Debit)
+            type: section
+            tab: Payments
+
+        gocardless_enabled:
+            label: Enable Direct Debit (GoCardless)
+            tab: Payments
+            type: switch
+            span: full
+            comment: Collect recurring bank payments via GoCardless.
+
+        gocardless_environment:
+            label: Environment
+            tab: Payments
+            type: dropdown
+            span: left
+            options:
+                sandbox: Sandbox (Testing)
+                live: Live
+            default: sandbox
+            trigger:
+                action: show
+                field: gocardless_enabled
+                condition: checked
+
+        gocardless_access_token:
+            label: Access Token
+            tab: Payments
+            type: text
+            span: right
+            comment: Found in GoCardless dashboard under Developers → API Keys.
+            trigger:
+                action: show
+                field: gocardless_enabled
+                condition: checked
+
+        gocardless_webhook_secret:
+            label: Webhook Endpoint Secret
+            tab: Payments
+            type: text
+            span: left
+            comment: Used to verify incoming GoCardless webhook signatures. Found under Developers → Webhooks.
+            trigger:
+                action: show
+                field: gocardless_enabled
+                condition: checked
+
+        payment_paypal_section:
+            label: PayPal
+            type: section
+            tab: Payments
+
+        paypal_enabled:
+            label: Enable PayPal
+            tab: Payments
+            type: switch
+            span: full
+            comment: Accept payments via PayPal accounts.
+
+        paypal_mode:
+            label: Mode
+            tab: Payments
+            type: dropdown
+            span: left
+            options:
+                sandbox: Sandbox (Testing)
+                live: Live
+            default: sandbox
+            trigger:
+                action: show
+                field: paypal_enabled
+                condition: checked
+
+        paypal_client_id:
+            label: Client ID
+            tab: Payments
+            type: text
+            span: left
+            comment: Found in PayPal Developer dashboard under My Apps & Credentials.
+            trigger:
+                action: show
+                field: paypal_enabled
+                condition: checked
+
+        paypal_secret:
+            label: Client Secret
+            tab: Payments
+            type: text
+            span: right
+            comment: Keep this private — never expose it on the frontend.
+            trigger:
+                action: show
+                field: paypal_enabled
+                condition: checked
+
+        paypal_webhook_id:
+            label: Webhook ID
+            tab: Payments
+            type: text
+            span: left
+            comment: "The Webhook ID from PayPal Developer dashboard. Used to verify webhook signatures."
+            trigger:
+                action: show
+                field: paypal_enabled
+                condition: checked

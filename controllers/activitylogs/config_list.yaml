@@ -1,0 +1,23 @@
+# ===================================
+#  List Behavior Config
+# ===================================
+
+# Model List Column configuration
+list: $/avalanchestudio/avalanchecrm/models/activitylog/columns.yaml
+
+# Model Class name
+modelClass: AvalancheStudio\AvalancheCRM\Models\ActivityLog
+
+# Title of the page
+title: Activity Logs
+
+# Toolbar widget configuration
+toolbar:
+  # Partial for toolbar buttons
+  buttons: list_toolbar
+
+  # Search widget configuration
+  search:
+    prompt: Search logs...
+# Link behavior
+# No links for logs as they are likely read-only
