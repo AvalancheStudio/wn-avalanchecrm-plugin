@@ -1,6 +1,3 @@
-0.0.0:
-    - "Rename plugin from Nexus CRM to Avalanche CRM – rename tables, role, settings, and transfer version history"
-
 0.0.1:
     - "First version of Avalanche CRM"
     - "Create Clients Table"
