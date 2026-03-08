@@ -43,6 +43,7 @@ class Plugin extends PluginBase
         // Register console commands
         $this->registerConsoleCommand('avalanchecrm.send-overdue-reminders', \AvalancheStudio\AvalancheCRM\Console\SendOverdueReminders::class);
         $this->registerConsoleCommand('avalanchecrm.send-renewal-reminders', \AvalancheStudio\AvalancheCRM\Console\SendRenewalReminders::class);
+        $this->registerConsoleCommand('avalanchecrm.sync-users', \AvalancheStudio\AvalancheCRM\Console\SyncCrmUsers::class);
     }
 
     /**
@@ -134,16 +135,7 @@ class Plugin extends PluginBase
             });
 
             $model->bindEvent('model.afterSave', function () use ($model) {
-                // Always sync email and name to associated Staff if they exist
                 $staff = $model->staff;
-                $isStaff = $model->groups()->where('code', 'staff')->exists() || request()->input('is_staff');
-
-                if (!$staff && $isStaff) {
-                    $staff = new \AvalancheStudio\AvalancheCRM\Models\Staff();
-                    $staff->user_id = $model->id;
-                    $model->setRelation('staff', $staff);
-                }
-
                 if ($staff) {
                     if ($staffData = post('staff')) {
                         $staff->fill($staffData);
@@ -153,16 +145,7 @@ class Plugin extends PluginBase
                     $staff->save();
                 }
 
-                // Sync for Client
                 $client = $model->client;
-                $isClient = $model->groups()->where('code', 'client')->exists() || request()->input('is_client');
-
-                if (!$client && $isClient) {
-                    $client = new \AvalancheStudio\AvalancheCRM\Models\Client();
-                    $client->user_id = $model->id;
-                    $model->setRelation('client', $client);
-                }
-
                 if ($client) {
                     $client->name = trim(($model->name ?? '') . ' ' . ($model->surname ?? '')) ?: $model->email;
                     $client->email = $model->email;
@@ -175,6 +158,43 @@ class Plugin extends PluginBase
                     }
                 }
             });
+        });
+
+        // This event fires AFTER all form relations (including groups pivot) are saved.
+        // This is the correct place to create Client/Staff records when a group is
+        // assigned to an existing user, because group membership is accurate here.
+        Event::listen('backend.form.afterUpdate', function ($widget) {
+            if (!$widget->getController() instanceof UsersController) {
+                return;
+            }
+
+            $model = $widget->model;
+
+            if (!$model instanceof UserModel) {
+                return;
+            }
+
+            $name = trim(($model->name ?? '') . ' ' . ($model->surname ?? '')) ?: $model->email;
+
+            // Create Staff CRM record if user is in the staff group but has no Staff record yet
+            $isStaff = $model->groups()->where('code', 'staff')->exists();
+            if ($isStaff && !$model->staff) {
+                $staff = new \AvalancheStudio\AvalancheCRM\Models\Staff();
+                $staff->user_id = $model->id;
+                $staff->name = $name;
+                $staff->email = $model->email;
+                $staff->save();
+            }
+
+            // Create Client CRM record if user is in the client group but has no Client record yet
+            $isClient = $model->groups()->where('code', 'client')->exists();
+            if ($isClient && !$model->client) {
+                $client = new \AvalancheStudio\AvalancheCRM\Models\Client();
+                $client->user_id = $model->id;
+                $client->name = $name;
+                $client->email = $model->email;
+                $client->save();
+            }
         });
 
         Event::listen('backend.form.extendFieldsBefore', function ($widget) {
