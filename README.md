@@ -1,11 +1,11 @@
+> [!WARNING]
+> **Work In Progress**: This plugin is currently in early development. Features, database structures, and components are subject to significant changes without prior notice. Use in production at your own risk.
+
 # Avalanche CRM
 
 A powerful, comprehensive Customer Relationship Management (CRM) and Billing system for Winter CMS. Streamline your client management, project tracking, invoicing, support tickets, and recurring subscriptions directly within your CMS.
 
 ![Avalanche CRM](https://raw.githubusercontent.com/avalanchestudio/wn-avalanchecrm-plugin/main/assets/images/dashboard.png)
-
-> [!WARNING]
-> **Work In Progress**: This plugin is currently in early development. Features, database structures, and components are subject to significant changes without prior notice. Use in production at your own risk.
 
 ## Key Features
 
