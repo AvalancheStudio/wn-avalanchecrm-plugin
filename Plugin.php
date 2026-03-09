@@ -427,6 +427,7 @@ class Plugin extends PluginBase
             \AvalancheStudio\AvalancheCRM\Components\Tickets::class => 'tickets',
             \AvalancheStudio\AvalancheCRM\Components\Invoices::class => 'invoices',
             \AvalancheStudio\AvalancheCRM\Components\Account::class => 'crmAccount',
+            \AvalancheStudio\AvalancheCRM\Components\Plans::class => 'plans',
         ];
     }
 

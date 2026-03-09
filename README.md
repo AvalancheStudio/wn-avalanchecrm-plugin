@@ -136,7 +136,7 @@ Registers granular permissions for:
 
 ## Support
 
-For technical support or feature requests, please contact [AvalancheStudio](mailto:support@avalanchestudio.uk).
+For technical support or feature requests, please contact [AvalancheStudio](mailto:support@avalanchestudio.co.uk).
 
 ---
 *Built with ❤️ for the Winter CMS Community.*

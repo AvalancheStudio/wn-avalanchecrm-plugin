@@ -1,0 +1,233 @@
+{{ themeStyles|raw }}
+
+<div class="subscriptions-wrapper" id="plans-wrapper">
+    <section class="subscriptions-section subscriptions-section--plans">
+        {% if plans|length > 0 %}
+            <div class="subscriptions-plans-grid">
+                {% for plan in plans %}
+                    <div class="plan-card">
+                        <div class="plan-card__header">
+                            <h3 class="plan-card__name">{{ plan.name }}</h3>
+                            <div class="plan-card__price">
+                                <span class="plan-card__amount">{{ currencySymbol }}{{ plan.price|number_format(2) }}</span>
+                                <span class="plan-card__cycle">/ {{ plan.billing_cycle }}</span>
+                            </div>
+                        </div>
+
+                        <div class="plan-card__body">
+                            {% if plan.description %}
+                                <p class="plan-card__description">{{ plan.description }}</p>
+                            {% endif %}
+
+                            {% if plan.features %}
+                                <ul class="plan-card__features">
+                                    {% for feature in plan.features %}
+                                        <li class="plan-card__feature">
+                                            <i class="icon-check"></i>
+                                            <span>{{ feature }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+
+                            <button
+                                type="button"
+                                class="subscriptions-btn subscriptions-btn--primary btn-register-subscribe"
+                                data-plan-id="{{ plan.id }}"
+                                data-plan-name="{{ plan.name }}"
+                                data-plan-price="{{ plan.price }}"
+                                data-plan-cycle="{{ plan.billing_cycle }}"
+                                style="width: 100%;"
+                            >
+                                {{ __SELF__.property('buttonText') }}
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="subscriptions-empty">
+                <p class="subscriptions-empty__text">No subscription plans are currently available.</p>
+            </div>
+        {% endif %}
+    </section>
+</div>
+
+{# Modal: Register and Subscribe #}
+<div class="subscriptions-modal" id="modal-register-subscribe" style="display:none;">
+    <div class="subscriptions-modal__overlay"></div>
+    <div class="subscriptions-modal__dialog">
+        <div class="subscriptions-modal__header">
+            <h3>Subscribe to <span id="reg-subscribe-plan-name"></span></h3>
+            <button type="button" class="subscriptions-modal__close">&times;</button>
+        </div>
+        <form data-request="onRegisterAndSubscribe" 
+              data-request-validate 
+              data-request-flash
+              data-request-success="
+                if (data.stripeRedirectUrl) window.location.href = data.stripeRedirectUrl;
+                if (data.paypalRedirectUrl) window.location.href = data.paypalRedirectUrl;
+                if (data.redirectUrl) window.location.href = data.redirectUrl;
+              ">
+            <div class="subscriptions-modal__body">
+                <div class="alert alert-danger" data-validate-error style="display:none; padding: 10px; background: #fee2e2; border: 1px solid #ef4444; border-radius: 4px; color: #b91c1c; margin-bottom: 15px;"></div>
+                
+                <input type="hidden" name="plan_id" id="reg-subscribe-plan-id" value="">
+
+                <div class="subscriptions-plan-summary">
+                    <span id="reg-subscribe-plan-price-display"></span>
+                </div>
+                
+                {% if user %}
+                    <div style="margin-top: 15px; padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;">
+                        <p style="margin: 0; font-size: 14px;">
+                            Logged in as <strong>{{ user.name }} {{ user.surname }}</strong> ({{ user.email }}).
+                            <a href="#" data-request="onLogout" style="margin-left: 5px; text-decoration: underline;">Logout</a>
+                        </p>
+                    </div>
+                {% else %}
+                    <h4 style="margin-top: 15px; margin-bottom: 5px; font-weight: bold;">Account Details</h4>
+                    
+                    <div style="margin-bottom: 15px; display: flex; gap: 15px;">
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                            <input type="radio" name="auth_mode" value="register" checked onchange="toggleAuthMode(this)"> 
+                            <span>Create an Account</span>
+                        </label>
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                            <input type="radio" name="auth_mode" value="login" onchange="toggleAuthMode(this)"> 
+                            <span>Login to existing</span>
+                        </label>
+                    </div>
+
+                    <div id="auth-register-fields">
+                        <div class="subscriptions-form-group">
+                            <label>Full Name</label>
+                            <input type="text" name="name" class="form-control" id="reg-name" required>
+                        </div>
+                        <div class="subscriptions-form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="email" class="form-control" id="reg-email" required>
+                        </div>
+                        <div class="subscriptions-form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" class="form-control" id="reg-password" required>
+                        </div>
+                    </div>
+
+                    <div id="auth-login-fields" style="display: none;">
+                        <div class="subscriptions-form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="login_email" class="form-control" id="log-email">
+                        </div>
+                        <div class="subscriptions-form-group">
+                            <label>Password</label>
+                            <input type="password" name="login_password" class="form-control" id="log-password">
+                        </div>
+                    </div>
+                {% endif %}
+
+                <h4 style="margin-top: 15px; margin-bottom: 5px; font-weight: bold;">Payment Method</h4>
+                <div class="subscriptions-form-group">
+                    <div class="subscriptions-payment-options">
+                        {% if stripeEnabled %}
+                            <label class="subscriptions-payment-option">
+                                <input type="radio" name="payment_method" value="card" checked>
+                                <span class="subscriptions-payment-option__label">
+                                    <i class="icon-credit-card"></i> Card (Stripe)
+                                    <small class="subscriptions-payment-option__hint">You'll be redirected to Stripe to enter your card details</small>
+                                </span>
+                            </label>
+                        {% endif %}
+                        {% if gocardlessEnabled %}
+                            <label class="subscriptions-payment-option">
+                                <input type="radio" name="payment_method" value="direct_debit">
+                                <span class="subscriptions-payment-option__label">
+                                    <i class="icon-bank"></i> Direct Debit (GoCardless)
+                                    <small class="subscriptions-payment-option__hint">You'll be redirected to GoCardless to set up your bank mandate</small>
+                                </span>
+                            </label>
+                        {% endif %}
+                        {% if paypalEnabled %}
+                            <label class="subscriptions-payment-option">
+                                <input type="radio" name="payment_method" value="paypal">
+                                <span class="subscriptions-payment-option__label">
+                                    <i class="icon-paypal"></i> PayPal
+                                    <small class="subscriptions-payment-option__hint">You'll be redirected to PayPal to approve your payment</small>
+                                </span>
+                            </label>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+            <div class="subscriptions-modal__footer">
+                <button type="button" class="subscriptions-btn subscriptions-btn--secondary subscriptions-modal__close-btn">Cancel</button>
+                <button type="submit" class="subscriptions-btn subscriptions-btn--primary">Proceed & Pay</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function toggleAuthMode(radio) {
+    const regFields = document.getElementById('auth-register-fields');
+    const logFields = document.getElementById('auth-login-fields');
+    
+    const regName = document.getElementById('reg-name');
+    const regEmail = document.getElementById('reg-email');
+    const regPass = document.getElementById('reg-password');
+    const logEmail = document.getElementById('log-email');
+    const logPass = document.getElementById('log-password');
+    
+    if (radio.value === 'login') {
+        regFields.style.display = 'none';
+        logFields.style.display = 'block';
+        if(regName) regName.removeAttribute('required');
+        if(regEmail) regEmail.removeAttribute('required');
+        if(regPass) regPass.removeAttribute('required');
+        if(logEmail) logEmail.setAttribute('required', 'required');
+        if(logPass) logPass.setAttribute('required', 'required');
+    } else {
+        regFields.style.display = 'block';
+        logFields.style.display = 'none';
+        if(regName) regName.setAttribute('required', 'required');
+        if(regEmail) regEmail.setAttribute('required', 'required');
+        if(regPass) regPass.setAttribute('required', 'required');
+        if(logEmail) logEmail.removeAttribute('required');
+        if(logPass) logPass.removeAttribute('required');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('modal-register-subscribe');
+    if (!modal) return;
+    
+    const btns = document.querySelectorAll('.btn-register-subscribe');
+    const closeBtns = modal.querySelectorAll('.subscriptions-modal__close, .subscriptions-modal__close-btn');
+
+    btns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const planId = this.getAttribute('data-plan-id');
+            const planName = this.getAttribute('data-plan-name');
+            const planPrice = this.getAttribute('data-plan-price');
+            const planCycle = this.getAttribute('data-plan-cycle');
+            
+            document.getElementById('reg-subscribe-plan-id').value = planId;
+            document.getElementById('reg-subscribe-plan-name').innerText = planName;
+            document.getElementById('reg-subscribe-plan-price-display').innerText = '{{ currencySymbol }}' + parseFloat(planPrice).toFixed(2) + ' / ' + planCycle;
+            
+            modal.style.display = 'block';
+        });
+    });
+
+    closeBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            modal.style.display = 'none';
+        });
+    });
+});
+</script>
