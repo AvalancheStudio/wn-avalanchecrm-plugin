@@ -79,6 +79,14 @@ return [
             'company_phone' => 'Contact Phone',
             'company_phone_comment' => 'Public contact phone number.',
         ],
+        'campaign' => [
+            'label' => 'Campaign',
+            'label_plural' => 'Campaigns',
+        ],
+        'emailtemplate' => [
+            'label' => 'Email Template',
+            'label_plural' => 'Email Templates',
+        ],
     ],
     'statuses' => [
         'active' => 'Active',
@@ -104,6 +112,9 @@ return [
         'invoices' => 'Invoices',
         'subscriptions' => 'Subscriptions',
         'settings' => 'Settings',
+        'marketing' => 'Marketing',
+        'campaigns' => 'Campaigns',
+        'email_templates' => 'Email Templates',
     ],
     'messages' => [
         'payment_cancelled' => 'Payment was cancelled. You can try again when you\'re ready.',

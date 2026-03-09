@@ -1,0 +1,46 @@
+<div class="projects-create-view">
+    <div class="projects-actions-nav" style="margin-bottom: 2rem;">
+        <button type="button" class="projects-btn projects-btn--outline"
+            data-request="{{ __SELF__ }}::onBackToList"
+            style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Back to Projects
+        </button>
+    </div>
+
+    <div class="projects-card">
+        <h2 class="projects-card-title" style="margin-bottom: 1.5rem; font-size: 1.5rem;">Request New Project</h2>
+
+        <form data-request="{{ __SELF__ }}::onCreateProject" data-request-flash>
+            <div class="projects-form-grid" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                
+                <div class="projects-form-field">
+                    <label for="project-name" style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Project Name *</label>
+                    <input type="text" id="project-name" name="project[name]" 
+                        class="projects-input" placeholder="Enter project name" required
+                        style="width: 100%; padding: 0.75rem; border: 1px solid #e0e0e0; border-radius: 6px;">
+                </div>
+
+                <div class="projects-form-field">
+                    <label for="project-description" style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Description</label>
+                    <textarea id="project-description" name="project[description]" 
+                        class="projects-input" rows="5" placeholder="Describe the project goals and requirements..."
+                        style="width: 100%; padding: 0.75rem; border: 1px solid #e0e0e0; border-radius: 6px; resize: vertical;"></textarea>
+                </div>
+
+                <div class="projects-form-actions" style="margin-top: 1rem; display: flex; gap: 1rem;">
+                    <button type="submit" class="projects-btn projects-btn--primary" data-attach-loading
+                        style="padding: 0.75rem 2rem; font-weight: 600;">
+                        Submit Request
+                    </button>
+                    <button type="button" class="projects-btn projects-btn--outline"
+                        data-request="{{ __SELF__ }}::onBackToList"
+                        style="padding: 0.75rem 1.5rem;">
+                        Cancel
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>

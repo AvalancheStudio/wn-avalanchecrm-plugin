@@ -12,10 +12,11 @@ fields:
         type: dropdown
         span: auto
         options:
-            pending: Pending
-            active: Active
-            completed: Completed
-            hold: On Hold
+            pending: Not Started
+            in_progress: In Progress
+            on_hold: On Hold
+            cancelled: Cancelled
+            completed: Finished
         default: pending
     start_date:
         label: Start Date

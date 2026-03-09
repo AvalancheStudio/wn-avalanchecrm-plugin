@@ -769,6 +769,14 @@
     padding: 0;
 }
 
+.projects-richtext-content ul {
+    list-style-type: disc;
+}
+
+.projects-richtext-content ol {
+    list-style-type: decimal;
+}
+
 .projects-richtext-content a {
     color: var(--crm-primary, #4a6cf7);
     text-decoration: underline;

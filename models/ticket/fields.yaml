@@ -70,3 +70,10 @@ tabs:
             select: concat(name, ' ', surname)
             span: left
             comment: Type to search and select staff members assigned to this ticket.
+        attachments:
+            label: Attachments
+            tab: Attachments
+            type: fileupload
+            span: full
+            useCaption: false
+            maxItems: 10

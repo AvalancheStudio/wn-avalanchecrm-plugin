@@ -86,6 +86,12 @@ class Projects extends ComponentBase
                 'validationPattern' => '^[0-9]+$',
                 'validationMessage' => 'Please enter a number.',
             ],
+            'allowCreate' => [
+                'title' => 'Allow Create',
+                'description' => 'Allow clients to request/create new projects.',
+                'type' => 'checkbox',
+                'default' => true,
+            ],
         ];
     }
 
@@ -148,8 +154,18 @@ class Projects extends ComponentBase
         $this->page['showTasks'] = $this->property('showTasks');
         $this->page['showTickets'] = $this->property('showTickets');
         $this->page['showInvoices'] = $this->property('showInvoices');
+        $this->page['allowCreate'] = $this->property('allowCreate');
         $this->page['currencySymbol'] = $this->settings->currency_symbol ?? '$';
         $this->page['currencyCode'] = $this->settings->currency_code ?? 'USD';
+
+        // Summary counts
+        $this->page['statusCounts'] = [
+            'pending' => $this->client->projects()->where('status', 'pending')->count(),
+            'in_progress' => $this->client->projects()->where('status', 'in_progress')->count(),
+            'on_hold' => $this->client->projects()->where('status', 'on_hold')->count(),
+            'completed' => $this->client->projects()->where('status', 'completed')->count(),
+            'cancelled' => $this->client->projects()->where('status', 'cancelled')->count(),
+        ];
     }
 
     /**
@@ -203,7 +219,83 @@ class Projects extends ComponentBase
         return [
             '#projects-list' => $this->renderPartial('@list'),
             '#projects-detail' => '',
+            '#projects-create' => '',
         ];
+    }
+
+    /**
+     * AJAX: Load the project create form.
+     */
+    public function onLoadCreateForm()
+    {
+        $this->getAuthenticatedClient();
+
+        return [
+            '#projects-create' => $this->renderPartial('@create'),
+            '#projects-list' => '',
+            '#projects-detail' => '',
+        ];
+    }
+
+    /**
+     * AJAX: Create a new project.
+     */
+    public function onCreateProject()
+    {
+        $client = $this->getAuthenticatedClient();
+
+        if (!$this->property('allowCreate', true)) {
+            throw new ApplicationException('Project creation is disabled.');
+        }
+
+        $data = Input::get('project', []);
+
+        if (empty($data['name'])) {
+            throw new ApplicationException('Project name is required.');
+        }
+
+        // Sanitise description
+        $description = '';
+        if (!empty($data['description'])) {
+            $description = strip_tags($data['description']);
+        }
+
+        $project = new Project();
+        $project->name = $data['name'];
+        $project->description = $description;
+        $project->status = 'pending';
+        $project->save();
+
+        // Attach client to project
+        $project->clients()->add($client);
+
+        Flash::success('Project request submitted successfully.');
+
+        $this->prepareVars();
+
+        return [
+            '#projects-list' => $this->renderPartial('@list'),
+            '#projects-create' => '',
+            '#projects-detail' => '',
+        ];
+    }
+
+    /**
+     * Helper: get the authenticated client or throw.
+     */
+    protected function getAuthenticatedClient(): Client
+    {
+        $user = Auth::getUser();
+        if (!$user) {
+            throw new ApplicationException(trans('avalanchestudio.avalanchecrm::lang.messages.must_be_logged_in'));
+        }
+
+        $client = Client::where('user_id', $user->id)->first();
+        if (!$client) {
+            throw new ApplicationException(trans('avalanchestudio.avalanchecrm::lang.messages.no_client_profile'));
+        }
+
+        return $client;
     }
 
     /**

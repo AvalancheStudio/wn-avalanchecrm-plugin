@@ -1,0 +1,29 @@
+rootPage: introduction
+sections:
+  Getting Started:
+    pages:
+      introduction: Introduction
+      quick-start: Quick Start
+  CRM:
+    pages:
+      crm/dashboard: Dashboard
+      crm/clients: Clients
+      crm/staff: Staff
+  Projects:
+    pages:
+      projects/projects: Projects
+      projects/tasks: Tasks
+  Billing:
+    pages:
+      billing/invoices: Invoices
+      billing/subscriptions: Subscriptions
+  Support:
+    pages:
+      support/tickets: Support Tickets
+  Marketing:
+    pages:
+      marketing/campaigns: Campaigns
+  Settings:
+    pages:
+      settings/activity-logs: Activity Logs
+      settings/email-templates: Email Templates

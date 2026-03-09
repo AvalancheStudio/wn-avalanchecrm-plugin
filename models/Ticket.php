@@ -128,7 +128,9 @@ class Ticket extends Model
     public $morphOne = [];
     public $morphMany = [];
     public $attachOne = [];
-    public $attachMany = [];
+    public $attachMany = [
+        'attachments' => [\System\Models\File::class],
+    ];
 
     /**
      * Dynamically add custom fields based on ticket type

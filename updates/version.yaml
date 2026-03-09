@@ -110,3 +110,6 @@
 0.4.0:
     - "Create Activity Logs table"
     - v0.4.0/create_activity_logs_table.php
+0.4.1:
+    - "Add ticket attachments"
+    - v0.4.1/add_ticket_attachments.php

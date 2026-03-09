@@ -5,6 +5,7 @@ namespace AvalancheStudio\AvalancheCRM\Components;
 use Winter\User\Facades\Auth;
 use Cms\Classes\ComponentBase;
 use AvalancheStudio\AvalancheCRM\Models\Client;
+use AvalancheStudio\AvalancheCRM\Models\Staff;
 use AvalancheStudio\AvalancheCRM\Models\Invoice;
 use AvalancheStudio\AvalancheCRM\Models\Settings;
 
@@ -17,6 +18,8 @@ class Dashboard extends ComponentBase
 {
     public $user;
     public $client;
+    public $staff;
+    public $isStaff = false;
     public $stats = [];
 
     public function componentDetails(): array
@@ -41,11 +44,15 @@ class Dashboard extends ComponentBase
         $this->user = Auth::getUser();
         if ($this->user) {
             $this->client = Client::where('user_id', $this->user->id)->first();
+            $this->staff = Staff::where('user_id', $this->user->id)->first();
+            $this->isStaff = (bool) $this->staff;
+
             if ($this->client) {
                 $this->prepareStats();
             }
         }
 
+        $this->page['isStaff'] = $this->isStaff;
         $this->page['crmSettings'] = Settings::instance();
     }
 

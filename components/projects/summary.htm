@@ -1,0 +1,56 @@
+{# Projects Summary Overview #}
+<div class="projects-summary-overview" style="margin-bottom: 2rem;">
+    <h3 style="margin-bottom: 1.25rem; font-weight: 600; color: #3A4E5A; font-size: 1.1rem;">Projects Summary</h3>
+    
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <!-- Not Started -->
+        <a href="javascript:;" 
+            onclick="document.getElementById('project-status-filter').value = 'pending'; document.getElementById('project-status-filter').dispatchEvent(new Event('change'));"
+            style="flex: 1; min-width: 140px; background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px 16px; text-decoration: none; display: block; transition: all 0.2s ease;"
+            onmouseover="this.style.borderColor='#405ADF'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)';"
+            onmouseout="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';">
+            <div style="font-size: 13px; color: #66727B; margin-bottom: 4px;">Not Started</div>
+            <div style="font-size: 20px; font-weight: 600; color: #405ADF;">{{ statusCounts.pending }}</div>
+        </a>
+
+        <!-- In Progress -->
+        <a href="javascript:;" 
+            onclick="document.getElementById('project-status-filter').value = 'in_progress'; document.getElementById('project-status-filter').dispatchEvent(new Event('change'));"
+            style="flex: 1; min-width: 140px; background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px 16px; text-decoration: none; display: block; transition: all 0.2s ease;"
+            onmouseover="this.style.borderColor='#405ADF'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)';"
+            onmouseout="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';">
+            <div style="font-size: 13px; color: #405ADF; margin-bottom: 4px;">In Progress</div>
+            <div style="font-size: 20px; font-weight: 600; color: #405ADF;">{{ statusCounts.in_progress }}</div>
+        </a>
+
+        <!-- On Hold -->
+        <a href="javascript:;" 
+            onclick="document.getElementById('project-status-filter').value = 'on_hold'; document.getElementById('project-status-filter').dispatchEvent(new Event('change'));"
+            style="flex: 1; min-width: 140px; background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px 16px; text-decoration: none; display: block; transition: all 0.2s ease;"
+            onmouseover="this.style.borderColor='#405ADF'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)';"
+            onmouseout="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';">
+            <div style="font-size: 13px; color: #EB6B3D; margin-bottom: 4px;">On Hold</div>
+            <div style="font-size: 20px; font-weight: 600; color: #405ADF;">{{ statusCounts.on_hold }}</div>
+        </a>
+
+        <!-- Cancelled -->
+        <a href="javascript:;" 
+            onclick="document.getElementById('project-status-filter').value = 'cancelled'; document.getElementById('project-status-filter').dispatchEvent(new Event('change'));"
+            style="flex: 1; min-width: 140px; background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px 16px; text-decoration: none; display: block; transition: all 0.2s ease;"
+            onmouseover="this.style.borderColor='#405ADF'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)';"
+            onmouseout="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';">
+            <div style="font-size: 13px; color: #9B9CA0; margin-bottom: 4px;">Cancelled</div>
+            <div style="font-size: 20px; font-weight: 600; color: #405ADF;">{{ statusCounts.cancelled }}</div>
+        </a>
+
+        <!-- Finished -->
+        <a href="javascript:;" 
+            onclick="document.getElementById('project-status-filter').value = 'completed'; document.getElementById('project-status-filter').dispatchEvent(new Event('change'));"
+            style="flex: 1; min-width: 140px; background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px 16px; text-decoration: none; display: block; transition: all 0.2s ease;"
+            onmouseover="this.style.borderColor='#405ADF'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)';"
+            onmouseout="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';">
+            <div style="font-size: 13px; color: #28A745; margin-bottom: 4px;">Finished</div>
+            <div style="font-size: 20px; font-weight: 600; color: #405ADF;">{{ statusCounts.completed }}</div>
+        </a>
+    </div>
+</div>

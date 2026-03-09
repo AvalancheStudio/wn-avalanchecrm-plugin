@@ -66,9 +66,9 @@ class Plugin extends PluginBase
         return [
             'filters' => [
                 'currency' => function ($value) {
-                    $settings = \AvalancheStudio\AvalancheCRM\Models\Settings::instance();
-                    $symbol = $settings->currency_symbol ?: '$';
-                    $code = $settings->currency_code ?: 'USD';
+                    $settings = Settings::instance();
+                    $symbol = $settings->currency_symbol ?: '£';
+                    $code = $settings->currency_code ?: 'GBP';
 
                     return $symbol . number_format($value, 2) . ' ' . $code;
                 }
@@ -117,20 +117,33 @@ class Plugin extends PluginBase
                 $name = trim(($model->name ?? '') . ' ' . ($model->surname ?? ''));
                 $email = $model->email;
 
-                if (request()->input('is_staff')) {
+                $isStaffRequested = request()->input('is_staff');
+                $isClientRequested = request()->input('is_client') || !$isStaffRequested;
+
+                if ($isStaffRequested) {
                     $staff = new \AvalancheStudio\AvalancheCRM\Models\Staff();
                     $staff->user_id = $model->id;
-                    $staff->name = $name ?: $email; // Fallback to email if name is missing
+                    $staff->name = $name ?: $email;
                     $staff->email = $email;
                     $staff->save();
+
+                    $group = UserGroup::where('code', 'staff')->first();
+                    if ($group) {
+                        $model->groups()->add($group);
+                    }
                 }
 
-                if (request()->input('is_client')) {
+                if ($isClientRequested) {
                     $client = new \AvalancheStudio\AvalancheCRM\Models\Client();
                     $client->user_id = $model->id;
                     $client->name = $name ?: $email;
                     $client->email = $email;
                     $client->save();
+
+                    $group = UserGroup::where('code', 'client')->first();
+                    if ($group) {
+                        $model->groups()->add($group);
+                    }
                 }
             });
 
@@ -542,11 +555,24 @@ class Plugin extends PluginBase
                 'description' => 'avalanchestudio.avalanchecrm::lang.models.settings.description',
                 'category' => 'Avalanche CRM',
                 'icon' => 'icon-cog',
-                'class' => \AvalancheStudio\AvalancheCRM\Models\Settings::class,
+                'class' => Settings::class,
                 'order' => 500,
                 'keywords' => 'crm payments stripe paypal gocardless settings',
                 'permissions' => ['avalanchestudio.avalanchecrm.manage_settings']
             ]
+        ];
+    }
+
+    // Register documentation
+    public function registerDocumentation()
+    {
+        return [
+            'guide' => [
+                'name' => 'Avalanche CRM Documentation',
+                'type' => 'md',
+                'source' => 'local',
+                'path' => 'plugins/avalanchestudio/avalanchecrm/docs'
+            ],
         ];
     }
 }

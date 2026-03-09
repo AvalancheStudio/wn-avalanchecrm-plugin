@@ -5,7 +5,7 @@ namespace AvalancheStudio\AvalancheCRM\Components;
 use Winter\User\Facades\Auth;
 use Winter\Storm\Support\Facades\Flash;
 use Winter\Storm\Support\Facades\Input;
-use Winter\Storm\Support\Facades\Redirect;
+use Redirect;
 use Winter\Storm\Support\Facades\Log;
 use Cms\Classes\ComponentBase;
 use AvalancheStudio\AvalancheCRM\Models\Client;
@@ -130,7 +130,7 @@ class Tickets extends ComponentBase
         if ($ticketId) {
             $this->activeTicket = $this->page['activeTicket'] = Ticket::where('id', $ticketId)
                 ->where('client_id', $this->client->id)
-                ->with(['project', 'category', 'staff', 'replies'])
+                ->with(['project', 'category', 'staff', 'replies', 'attachments'])
                 ->first();
         }
 
@@ -162,7 +162,7 @@ class Tickets extends ComponentBase
 
         $ticket = Ticket::where('id', $ticketId)
             ->where('client_id', $client->id)
-            ->with(['project', 'category', 'staff', 'replies'])
+            ->with(['project', 'category', 'staff', 'replies', 'attachments'])
             ->first();
 
         if (!$ticket) {
@@ -260,6 +260,19 @@ class Tickets extends ComponentBase
         }
 
         $ticket->save();
+
+        // Bind any uploaded attachments
+        $files = Input::file('attachments', []);
+        if (!is_array($files)) {
+            $files = [$files];
+        }
+        foreach ($files as $file) {
+            if ($file && $file->isValid()) {
+                $fileModel = new \System\Models\File();
+                $fileModel->fromPost($file);
+                $ticket->attachments()->add($fileModel);
+            }
+        }
 
         Flash::success(trans('avalanchestudio.avalanchecrm::lang.messages.ticket_created'));
 
@@ -418,6 +431,33 @@ class Tickets extends ComponentBase
     }
 
     /**
+     * AJAX: Serve a ticket attachment for download (ownership-checked).
+     */
+    public function onDownloadAttachment()
+    {
+        $client = $this->getAuthenticatedClient();
+
+        $fileId = (int) Input::get('file_id');
+        $ticketId = (int) Input::get('ticket_id');
+
+        // Verify the ticket belongs to this client
+        $ticket = Ticket::where('id', $ticketId)
+            ->where('client_id', $client->id)
+            ->first();
+
+        if (!$ticket) {
+            throw new ApplicationException(trans('avalanchestudio.avalanchecrm::lang.messages.ticket_not_found'));
+        }
+
+        $file = $ticket->attachments()->where('id', $fileId)->first();
+        if (!$file) {
+            throw new ApplicationException('Attachment not found.');
+        }
+
+        return \Response::download($file->getLocalPath(), $file->file_name);
+    }
+
+    /**
      * Helper: get the authenticated client or throw.
      */
     protected function getAuthenticatedClient(): Client
@@ -442,7 +482,7 @@ class Tickets extends ComponentBase
     {
         $ticket = Ticket::where('id', $ticketId)
             ->where('client_id', $client->id)
-            ->with(['project', 'category', 'staff', 'replies'])
+            ->with(['project', 'category', 'staff', 'replies', 'attachments'])
             ->first();
 
         $this->page['activeTicket'] = $ticket;
