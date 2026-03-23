@@ -5,7 +5,10 @@
         {% if plans|length > 0 %}
             <div class="subscriptions-plans-grid">
                 {% for plan in plans %}
-                    <div class="plan-card">
+                    <div class="plan-card {% if plan.id == highlightedPlanId %}plan-card--highlighted{% endif %}">
+                        {% if plan.id == highlightedPlanId %}
+                            <div class="plan-card__badge">Most Popular</div>
+                        {% endif %}
                         <div class="plan-card__header">
                             <h3 class="plan-card__name">{{ plan.name }}</h3>
                             <div class="plan-card__price">

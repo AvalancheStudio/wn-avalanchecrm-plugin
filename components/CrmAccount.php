@@ -16,7 +16,7 @@ use AvalancheStudio\AvalancheCRM\Models\Client;
  *
  * Allows users to manage their account details like address, tel no etc.
  */
-class Account extends ComponentBase
+class CrmAccount extends ComponentBase
 {
     /**
      * @var \Winter\User\Models\User The authenticated user.

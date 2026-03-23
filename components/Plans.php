@@ -39,6 +39,17 @@ class Plans extends ComponentBase
     public function defineProperties(): array
     {
         return [
+            'plansToShow' => [
+                'title' => 'Plans to Show',
+                'description' => 'Select which available plans to show. Leave empty to show all active plans.',
+                'type' => 'set'
+            ],
+            'highlightedPlan' => [
+                'title' => 'Highlighted Plan (Most Popular)',
+                'description' => 'Select a plan to highlight visually as the most popular option.',
+                'type' => 'dropdown',
+                'emptyOption' => '-- None --'
+            ],
             'registerPage' => [
                 'title' => 'Registration Page',
                 'description' => 'The page where users are redirected to register and pay for the selected plan.',
@@ -52,6 +63,16 @@ class Plans extends ComponentBase
                 'default' => 'Choose Plan'
             ]
         ];
+    }
+
+    public function getPlansToShowOptions()
+    {
+        return SubscriptionPlan::where('is_active', true)->lists('name', 'id');
+    }
+
+    public function getHighlightedPlanOptions()
+    {
+        return SubscriptionPlan::where('is_active', true)->lists('name', 'id');
     }
 
     public function getRegisterPageOptions()
@@ -71,9 +92,16 @@ class Plans extends ComponentBase
     {
         $this->settings = $this->page['settings'] = Settings::instance();
 
-        $this->plans = $this->page['plans'] = SubscriptionPlan::where('is_active', true)
-            ->orderBy('sort_order', 'asc')
-            ->get();
+        $query = SubscriptionPlan::where('is_active', true)->orderBy('sort_order', 'asc');
+
+        $plansToShow = $this->property('plansToShow');
+        if (!empty($plansToShow) && is_array($plansToShow)) {
+            $query->whereIn('id', $plansToShow);
+        }
+
+        $this->plans = $this->page['plans'] = $query->get();
+
+        $this->page['highlightedPlanId'] = $this->property('highlightedPlan');
 
         $this->page['currencySymbol'] = $this->settings->currency_symbol ?? '$';
         $this->page['currencyCode'] = $this->settings->currency_code ?? 'USD';
