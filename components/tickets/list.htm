@@ -1,0 +1,96 @@
+{# Ticket List with Filter #}
+<div class="tickets-toolbar">
+    <h2 class="tickets-heading">My Tickets</h2>
+    <div class="tickets-toolbar-right">
+        <select id="ticket-status-filter" class="tickets-select"
+            data-request="{{ __SELF__ }}::onFilterTickets"
+            data-request-data="status: this.value"
+            data-request-update="'{{ __SELF__ }}::list': '#tickets-list'">
+            <option value="all">All Statuses</option>
+            <option value="open">Open</option>
+            <option value="in_progress">In Progress</option>
+            <option value="resolved">Resolved</option>
+            <option value="closed">Closed</option>
+        </select>
+
+        {% if allowCreate %}
+            <button class="tickets-btn tickets-btn--primary"
+                data-request="{{ __SELF__ }}::onShowCreateForm">
+                <i class="icon-plus"></i> New Ticket
+            </button>
+        {% endif %}
+    </div>
+</div>
+
+{% if tickets is not empty %}
+    <div class="tickets-list">
+        {% for ticket in tickets %}
+            <button type="button" class="tickets-card"
+                 data-request="{{ __SELF__ }}::onViewTicket"
+                 data-request-data="ticket_id: {{ ticket.id }}">
+
+                <div class="tickets-card-top">
+                    <h3 class="tickets-card-subject">{{ ticket.subject }}</h3>
+                    <span class="tickets-status tickets-status--{{ ticket.status }}">
+                        {{ ticket.status|replace({'_': ' '})|title }}
+                    </span>
+                </div>
+
+                <div class="tickets-card-details">
+                    {% if ticket.category %}
+                        <span class="tickets-tag" {% if ticket.category.color %}style="background-color: {{ ticket.category.color }}14; color: {{ ticket.category.color }}; border-color: {{ ticket.category.color }}30;"{% endif %}>
+                            {{ ticket.category.name }}
+                        </span>
+                    {% endif %}
+
+                    <span class="tickets-priority-dot tickets-priority-dot--{{ ticket.priority }}" title="{{ ticket.priority|title }} priority"></span>
+                    <span class="tickets-card-meta">{{ ticket.priority|title }}</span>
+
+                    {% if ticket.staff is not empty %}
+                        <span class="tickets-card-sep"></span>
+                        <span class="tickets-card-meta" title="Assigned to: {{ ticket.staff|map(s => s.name)|join(', ') }}">
+                            <i class="icon-user"></i> {{ ticket.staff|map(s => s.name)|join(', ') }}
+                        </span>
+                    {% endif %}
+
+                    {% if ticket.project %}
+                        <span class="tickets-card-sep"></span>
+                        <span class="tickets-card-meta"><i class="icon-briefcase"></i> {{ ticket.project.name }}</span>
+                    {% endif %}
+
+                    <span class="tickets-card-sep"></span>
+                    <span class="tickets-card-meta">{{ ticket.created_at|date('M d, Y') }}</span>
+                </div>
+            </button>
+        {% endfor %}
+    </div>
+
+    {# Pagination #}
+    {% if tickets.lastPage > 1 %}
+        <div class="tickets-pagination">
+            {% if tickets.currentPage > 1 %}
+                <a href="{{ this.page.baseFileName|page }}?page={{ tickets.currentPage - 1 }}" class="tickets-btn tickets-btn--outline">&laquo; Previous</a>
+            {% endif %}
+
+            <span class="tickets-pagination-info">
+                Page {{ tickets.currentPage }} of {{ tickets.lastPage }}
+            </span>
+
+            {% if tickets.currentPage < tickets.lastPage %}
+                <a href="{{ this.page.baseFileName|page }}?page={{ tickets.currentPage + 1 }}" class="tickets-btn tickets-btn--outline">Next &raquo;</a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+{% else %}
+    <div class="tickets-empty">
+        <i class="icon-ticket tickets-empty-icon"></i>
+        <p>No tickets found.</p>
+        {% if allowCreate %}
+            <button class="tickets-btn tickets-btn--primary"
+                data-request="{{ __SELF__ }}::onShowCreateForm">
+                <i class="icon-plus"></i> Create Your First Ticket
+            </button>
+        {% endif %}
+    </div>
+{% endif %}

@@ -1,0 +1,154 @@
+{# Ticket Detail View #}
+<div class="tickets-detail">
+
+    <button class="tickets-btn tickets-btn--outline tickets-back-btn"
+        data-request="{{ __SELF__ }}::onBackToList">
+        <i class="icon-arrow-left"></i> Back to Tickets
+    </button>
+
+    <div class="tickets-detail-layout">
+
+        {# Main Content #}
+        <div class="tickets-detail-main">
+            <div class="tickets-detail-card">
+                <div class="tickets-detail-header">
+                    <span class="tickets-status tickets-status--{{ activeTicket.status }}">
+                        {{ activeTicket.status|replace({'_': ' '})|title }}
+                    </span>
+                    <h2 class="tickets-detail-title">{{ activeTicket.subject }}</h2>
+                    <span class="tickets-detail-date">Opened {{ activeTicket.created_at|date('M d, Y \\a\\t h:i A') }}</span>
+                </div>
+
+                {% if activeTicket.description %}
+                    <div class="tickets-detail-body">
+                        <div class="tickets-detail-description">
+                            {{ activeTicket.description|raw }}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="tickets-detail-body">
+                        <p class="tickets-muted" style="font-style:italic">No description provided.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            {# Replies Thread #}
+            <div class="tickets-replies-section">
+                <h3 class="tickets-replies-heading">Conversation</h3>
+
+                {% set replies = activeTicket.replies %}
+                {% if replies is not empty %}
+                    <div class="tickets-replies-thread">
+                        {% for reply in replies %}
+                            {% if not reply.is_internal %}
+                                <div class="tickets-reply tickets-reply--{{ reply.author_type }}">
+                                    <div class="tickets-reply-header">
+                                        <span class="tickets-reply-author">
+                                            <i class="icon-{{ reply.author_type == 'client' ? 'user' : 'headset' }}"></i>
+                                            {{ reply.author_display_name }}
+                                        </span>
+                                        <span class="tickets-reply-date">{{ reply.created_at|date('M d, Y \\a\\t h:i A') }}</span>
+                                    </div>
+                                    <div class="tickets-reply-body">
+                                        {{ reply.content|nl2br }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="tickets-muted" style="font-style:italic;">No replies yet.</p>
+                {% endif %}
+
+                {# Reply Form #}
+                {% if activeTicket.status != 'closed' %}
+                    <div class="tickets-reply-form">
+                        <h4 class="tickets-reply-form-heading">Add a Reply</h4>
+                        <form>
+                            <input type="hidden" name="ticket_id" value="{{ activeTicket.id }}" />
+                            <div class="tickets-form-group">
+                                <textarea name="reply_content" class="tickets-textarea" rows="4" placeholder="Type your reply..."></textarea>
+                            </div>
+                            <button type="submit" class="tickets-btn tickets-btn--primary"
+                                data-request="{{ __SELF__ }}::onAddReply"
+                                data-request-flash>
+                                <i class="icon-paper-plane"></i> Send Reply
+                            </button>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Sidebar #}
+        <aside class="tickets-detail-sidebar">
+
+            {# Priority #}
+            <div class="tickets-sidebar-section">
+                <h4 class="tickets-sidebar-label">Priority</h4>
+                <select class="tickets-select tickets-select--full"
+                    data-request="{{ __SELF__ }}::onUpdateTicketPriority"
+                    data-request-data="ticket_id: {{ activeTicket.id }}, priority: this.value"
+                    data-request-flash>
+                    <option value="low" {{ activeTicket.priority == 'low' ? 'selected' }}>Low</option>
+                    <option value="medium" {{ activeTicket.priority == 'medium' ? 'selected' }}>Medium</option>
+                    <option value="high" {{ activeTicket.priority == 'high' ? 'selected' }}>High</option>
+                </select>
+            </div>
+
+            {# Category #}
+            {% if activeTicket.category %}
+                <div class="tickets-sidebar-section">
+                    <h4 class="tickets-sidebar-label">Category</h4>
+                    <span class="tickets-tag" {% if activeTicket.category.color %}style="background-color: {{ activeTicket.category.color }}14; color: {{ activeTicket.category.color }}; border-color: {{ activeTicket.category.color }}30;"{% endif %}>
+                        {{ activeTicket.category.name }}
+                    </span>
+                </div>
+            {% endif %}
+
+            {# Project #}
+            {% if activeTicket.project %}
+                <div class="tickets-sidebar-section">
+                    <h4 class="tickets-sidebar-label">Project</h4>
+                    <span class="tickets-sidebar-value">{{ activeTicket.project.name }}</span>
+                </div>
+            {% endif %}
+
+            {# Assigned Staff #}
+            {% if activeTicket.staff is not empty %}
+                <div class="tickets-sidebar-section">
+                    <h4 class="tickets-sidebar-label">Assigned To</h4>
+                    <div class="tickets-staff-list">
+                        {% for member in activeTicket.staff %}
+                            <span class="tickets-staff-badge"><i class="icon-user"></i> {{ member.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {# Actions #}
+            <div class="tickets-sidebar-section tickets-sidebar-actions">
+                {% if allowClose and activeTicket.status != 'closed' %}
+                    <button class="tickets-btn tickets-btn--danger tickets-btn--full"
+                        data-request="{{ __SELF__ }}::onCloseTicket"
+                        data-request-data="ticket_id: {{ activeTicket.id }}"
+                        data-request-flash
+                        data-request-confirm="Are you sure you want to close this ticket?">
+                        <i class="icon-times-circle"></i> Close Ticket
+                    </button>
+                {% endif %}
+
+                {% if allowReopen and (activeTicket.status == 'closed' or activeTicket.status == 'resolved') %}
+                    <button class="tickets-btn tickets-btn--outline tickets-btn--full"
+                        data-request="{{ __SELF__ }}::onReopenTicket"
+                        data-request-data="ticket_id: {{ activeTicket.id }}"
+                        data-request-flash
+                        data-request-confirm="Are you sure you want to reopen this ticket?">
+                        <i class="icon-refresh"></i> Reopen Ticket
+                    </button>
+                {% endif %}
+            </div>
+
+        </aside>
+    </div>
+</div>
