@@ -20,17 +20,17 @@ return new class extends Migration {
             $table->text('error_message')->nullable();
             $table->timestamps();
 
-            $table->foreign('campaign_id')
+            $table->foreign('campaign_id', 'acrm_rec_campaign_fk')
                 ->references('id')
                 ->on('avalanchestudio_avalanchecrm_campaigns')
                 ->onDelete('cascade');
 
-            $table->foreign('client_id')
+            $table->foreign('client_id', 'acrm_rec_client_fk')
                 ->references('id')
                 ->on('avalanchestudio_avalanchecrm_clients')
                 ->onDelete('cascade');
 
-            $table->unique(['campaign_id', 'client_id']);
+            $table->unique(['campaign_id', 'client_id'], 'acrm_rec_campaign_client_uq');
         });
 
         // Add tracking counters to campaigns
